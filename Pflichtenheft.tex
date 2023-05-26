@@ -157,7 +157,9 @@ sehr großer Fokus: $++$    großer Fokus: $+$    mittlerer Fokus: $o$    kleine
 \subsection{Klasendiagramm}
 
 \subsubsection{Minimalanforderung}
+ohne AI
 \subsubsection{Zusatzanforderung}
+mit AI
 
 \newpage
 
@@ -165,20 +167,26 @@ sehr großer Fokus: $++$    großer Fokus: $+$    mittlerer Fokus: $o$    kleine
 
 \subsubsection{Game}
 
-\textbf{run: Beherbergt die main game loop, in der die Inputs des Spielers verarbeitet werden und die AI ausführt.}
+\textbf{run(): Beherbergt die main game loop, die den Spielzyklus ausführt, die GUI baut und das Spiel beendet.}
 
 \subsubsection{Position}
 
-\textbf{set_turn()}
-\textbf{get_position()}
-\textbf{get_possible_turns()}
+\textbf{set_turn(): Führt einen Zug aus und updated den Spielzustand.}
+\textbf{get_position(): Gibt das Spielfeld als Liste zurück.}
+\textbf{get_possible_turns(): Gibt alle Möglichen Züge als Liste zurück.}
+\textbf{check_end(): Gibt True zurück, wenn jemand gewonnen hat.}
 
 \subsubsection{Player}
 
-\textbf{handle_input: Wartet auf einen Input des Spielers, überprüft ob dieser valid ist und verarbeitet diesen.}
+\textbf{handle_input(): Wartet auf einen Input des Spielers, überprüft ob dieser valide ist und verarbeitet diesen.}
 
 \subsubsection{AI}
+\textbf{rate_turn(): Bewertungsfunktion für die angegebene Position.}
+\textbf{build_tree(): Lässt alle möglichen Züge bewerten und baut dann den Baum.} Zusatz: abschneiden
+\textbf{play best turn(): Nimmt den besten Zug aus dem Baum und führt ihn aus.}
+
 \subsubsection{Node}
+\textbf{Knoten des Baumes, die alle Informationen über den Zug speichern}
 
 %------------------------------------------------------------
 

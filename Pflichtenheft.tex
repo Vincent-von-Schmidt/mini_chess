@@ -158,8 +158,18 @@ sehr großer Fokus: $++$    großer Fokus: $+$    mittlerer Fokus: $o$    kleine
 
 \subsubsection{Minimalanforderung}
 ohne AI
+\begin{figure}[h]
+    \centering
+    \fbox{\includegraphics[width=4in,
+    keepaspectratio]{img/class_diagramm_without_ai.png}}
+\end{figure}
+
 \subsubsection{Zusatzanforderung}
 mit AI
+\begin{figure}[h]
+    \centering
+    \fbox{\includegraphics[width=4in, keepaspectratio]{img/class_diagramm_ai.png}}
+\end{figure}
 
 \newpage
 
@@ -167,23 +177,25 @@ mit AI
 
 \subsubsection{Game}
 
-\textbf{run(): Beherbergt die main game loop, die den Spielzyklus ausführt, die GUI baut und das Spiel beendet.}
+\textbf{run():} Beherbergt die main game loop, die den Spielzyklus ausführt, die GUI baut und das Spiel beendet.
 
 \subsubsection{Position}
 
-\textbf{set_turn(): Führt einen Zug aus und updated den Spielzustand.}
-\textbf{get_position(): Gibt das Spielfeld als Liste zurück.}
-\textbf{get_possible_turns(): Gibt alle Möglichen Züge als Liste zurück.}
-\textbf{check_end(): Gibt True zurück, wenn jemand gewonnen hat.}
+\textbf{set\_turn():} Führt einen Zug aus und updated den Spielzustand. \\
+\textbf{get\_position():} Gibt das Spielfeld als Liste zurück. \\
+\textbf{get\_possible\_turns():} Gibt alle Möglichen Züge als Liste zurück. \\
+\textbf{check\_end():} Gibt True zurück, wenn jemand gewonnen hat. \\
 
 \subsubsection{Player}
 
-\textbf{handle_input(): Wartet auf einen Input des Spielers, überprüft ob dieser valide ist und verarbeitet diesen.}
+\textbf{handle\_input():} Wartet auf einen Input des Spielers, überprüft ob dieser valide
+ist und verarbeitet diesen. \\
 
 \subsubsection{AI}
-\textbf{rate_turn(): Bewertungsfunktion für die angegebene Position.}
-\textbf{build_tree(): Lässt alle möglichen Züge bewerten und baut dann den Baum.} Zusatz: abschneiden
-\textbf{play best turn(): Nimmt den besten Zug aus dem Baum und führt ihn aus.}
+\textbf{rate\_turn():} Bewertungsfunktion für die angegebene Position. \\
+\textbf{build\_tree():} Lässt alle möglichen Züge bewerten und baut dann den Baum. \\
+Zusatz: abschneiden \\
+\textbf{play best turn():} Nimmt den besten Zug aus dem Baum und führt ihn aus. \\
 
 \subsubsection{Node}
 \textbf{Knoten des Baumes, die alle Informationen über den Zug speichern}

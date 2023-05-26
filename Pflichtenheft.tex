@@ -181,18 +181,18 @@ mit AI
 
 \subsubsection{Position}
 
-\textbf{set\_turn():} Führt einen Zug aus und updated den Spielzustand. \\
+\textbf{set\_turn(start: int, target: int):} Bekommt den Zug als Integer der Felder. Führt den Zug aus und updated den Spielzustand. \\
 \textbf{get\_position():} Gibt das Spielfeld als Liste zurück. \\
 \textbf{get\_possible\_turns():} Gibt alle Möglichen Züge als Liste zurück. \\
-\textbf{check\_end():} Gibt True zurück, wenn jemand gewonnen hat. \\
+\textbf{check\_end():} Gibt True zurück, wenn jemand gewonnen hat und merkt sich den Gewinner. \\
 
 \subsubsection{Player}
 
-\textbf{handle\_input():} Wartet auf einen Input des Spielers, überprüft ob dieser valide
+\textbf{handle\_input(Position):}Bekommt die aktuelle Position. Kann dem Spieler die möglichen Züge anzeigen, Wartet auf einen Input des Spielers, überprüft ob dieser valide
 ist und verarbeitet diesen. \\
 
 \subsubsection{AI}
-\textbf{rate\_turn():} Bewertungsfunktion für die angegebene Position. \\
+\textbf{rate\_turn(Position):} Bewertungsfunktion für die angegebene Position. \\
 \textbf{build\_tree():} Lässt alle möglichen Züge bewerten und baut dann den Baum. \\
 Zusatz: abschneiden \\
 \textbf{play best turn():} Nimmt den besten Zug aus dem Baum und führt ihn aus. \\

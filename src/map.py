@@ -1,5 +1,7 @@
 import pygame
 
+import const
+
 
 class Tile:
     def __init__(self, texture: tuple[int, ...] | str) -> None:
@@ -11,18 +13,27 @@ class Tile:
         texture: str -> path to image file
         """
 
-        self.surface: pygame.surface.Surface = pygame.surface.Surface( (128, 128) )
+        self.surface: pygame.surface.Surface = pygame.surface.Surface(
+            (const.TILE_SIZE, const.TILE_SIZE) 
+        )
 
         # texture type check and coloring of surface
 
-        if texture_type := type( texture ) == str:
+        # get type of texture var
+        texture_type: object = type( texture )
+
+        # path given -> draw image on tile
+        if texture_type == str:
             self.surface.blit(
                 pygame.image.load( texture ), # load texture image
                 (0, 0) # default position to draw
             )
 
-        elif texture_type == tuple[int, ...]:
+        # color code given -> fill tile with given color
+        # elif texture_type == tuple[int, ...]:
+        elif texture_type == tuple:
             self.surface.fill( texture )
+            # pygame.Surface.fill(self.surface, texture)
 
 
 class Map:
@@ -30,9 +41,8 @@ class Map:
 
         self.ratio: tuple[int, int] = ratio
 
-        # 128*128 -> tile size
-        width: int = self.ratio[0] * 128
-        height: int = self.ratio[1] * 128
+        width: int = self.ratio[0] * const.TILE_SIZE
+        height: int = self.ratio[1] * const.TILE_SIZE
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface( (width, height) )
 
@@ -47,15 +57,15 @@ class Map:
         build the construct_matrix
         """
 
-        for _ in range( self.ratio[0] ): # per row
+        for _ in range( self.ratio[0] ): # row
             
             # one list per row
             self.construct_matrix.append( row := [] )
 
-            for _ in range( self.ratio[1] ): # per column
+            for _ in range( self.ratio[1] ): # column
 
                 # append white tile
-                row.append( Tile((255, 255, 255)) )
+                row.append( Tile((150, 50, 100)) )
 
     def render(self) -> None:
         """
@@ -64,12 +74,12 @@ class Map:
 
         heights: list = []
 
-        for row in self.construct_matrix:
+        for row in self.construct_matrix: # row
 
             widths: list = []
             tmp_tile: Tile | None = None
 
-            for tile in row:
+            for tile in row: # column
 
                 # drawing coordinates
                 x: int = sum( widths )

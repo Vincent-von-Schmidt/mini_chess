@@ -22,7 +22,7 @@ class Game:
         self.running: bool = True
 
         # init map
-        self.map: map.Map = map.Map((3, 3))
+        self.map: map.Map = map.Map()
 
     def input(self) -> None:
         """
@@ -31,13 +31,17 @@ class Game:
 
         # get all events
         events: list = pygame.event.get()
-        # keys: pygame.key.ScanccodeWrapper = pygame.key.get_pressed()
+        keys: pygame.key.ScanccodeWrapper = pygame.key.get_pressed()
 
         for event in events:
 
             # if clicked on the close button -> break game loop
             if event.type == pygame.QUIT:
                 self.running: bool = False
+
+        # close window on key e -> faster keyboard control
+        if keys[pygame.K_e]:
+            self.running: bool = False
 
     def update(self) -> None:
         """

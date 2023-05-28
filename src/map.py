@@ -37,12 +37,10 @@ class Tile:
 
 
 class Map:
-    def __init__(self, ratio: tuple[int, int]) -> None:
+    def __init__(self) -> None:
 
-        self.ratio: tuple[int, int] = ratio
-
-        width: int = self.ratio[0] * const.TILE_SIZE
-        height: int = self.ratio[1] * const.TILE_SIZE
+        width: int = const.RATIO[0] * const.TILE_SIZE
+        height: int = const.RATIO[1] * const.TILE_SIZE
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface( (width, height) )
 
@@ -57,15 +55,27 @@ class Map:
         build the construct_matrix
         """
 
-        for _ in range( self.ratio[0] ): # row
+        chess_board_pattern_switch: bool = True
+
+        for _ in range( const.RATIO[0] ): # row
             
             # one list per row
             self.construct_matrix.append( row := [] )
 
-            for _ in range( self.ratio[1] ): # column
+            for _ in range( const.RATIO[1] ): # column
+
+                # black tile
+                if chess_board_pattern_switch:
+                    color: tuple = (0, 0, 0)
+                    chess_board_pattern_switch: bool = False
+
+                # white tile
+                else:
+                    color: tuple = (255, 255, 255)
+                    chess_board_pattern_switch: bool = True
 
                 # append white tile
-                row.append( Tile((150, 50, 100)) )
+                row.append( Tile(color) )
 
     def render(self) -> None:
         """

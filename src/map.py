@@ -73,7 +73,7 @@ class Map:
                     chess_board_pattern_switch: bool = True
 
                 # append white tile
-                row.append( Tile(color) )
+                row.append( Tile(const.BOARD_COLOR_A) )
 
     def render(self) -> None:
         """

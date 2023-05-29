@@ -64,16 +64,13 @@ class Map:
 
                 # black tile
                 if chess_board_pattern_switch:
-                    color: tuple = (0, 0, 0)
                     chess_board_pattern_switch: bool = False
+                    row.append( Tile(const.BOARD_COLOR_A) )
 
                 # white tile
                 else:
-                    color: tuple = (255, 255, 255)
                     chess_board_pattern_switch: bool = True
-
-                # append white tile
-                row.append( Tile(const.BOARD_COLOR_A) )
+                    row.append( Tile(const.BOARD_COLOR_B) )
 
     def render(self) -> None:
         """

@@ -32,7 +32,6 @@ class Tile:
         # color code given -> fill tile with given color
         elif texture_type == tuple:
             self.surface.fill( texture )
-            # pygame.Surface.fill(self.surface, texture)
 
 
 class Map:

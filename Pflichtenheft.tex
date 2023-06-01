@@ -56,13 +56,15 @@
     \item rating algo $\rightarrow$ Player vs. CPU
     \item 3x3
     \item pygame GUI
+    \item simples 3x3 Schach $\rightarrow$ Ziel: als erstes die andere Seite erreichen
 \end{itemize}
 
 \subsection{Zusatzanforderung}
 \begin{itemize}
+    \item Algorythmus zur Vertiefung der Suchtiefe des "Zugbaum"
     \item 4x4; 5x5
+    \item spezielle Figuren
     \item Player vs. Player
-    \item PyQt with embeded pygame $\rightarrow$ clean GUI
     \item Multithreading
 \end{itemize}
 
@@ -194,7 +196,7 @@ ist und verarbeitet diesen. \\
 \subsubsection{AI}
 \textbf{rate\_turn(Position):} Bewertungsfunktion für die angegebene Position. \\
 \textbf{build\_tree():} Lässt alle möglichen Züge bewerten und baut dann den Baum. \\
-Zusatz: abschneiden \\
+Zusatz: Algorythmus zur Vertiefung der Suchtiefe des "Zugbaum"\\
 \textbf{play best turn():} Nimmt den besten Zug aus dem Baum und führt ihn aus. \\
 
 \subsubsection{Node}

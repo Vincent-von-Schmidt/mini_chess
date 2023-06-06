@@ -48,7 +48,8 @@ class Game:
         game logic
         """
 
-        pass
+        if type(position.turn) == Player: position.turn.handle_input(position)
+        else: position.turn.play_best_turn(position)
 
     def render(self) -> None:
         """

@@ -4,3 +4,4 @@ BOARD_RESOLUTION: int = 400
 BOARD_COLOR_A: tuple[int, int, int] = (0, 0, 0)
 BOARD_COLOR_B: tuple[int, int, int] = (255, 255, 255)
 FONT: str = "Arial"
+FIELD_EMPTY: list[int, int, int, int, int, int, int, int, int] = [int, int, int, int, int, int, int, int, int]

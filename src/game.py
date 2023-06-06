@@ -1,6 +1,7 @@
 import pygame
 
 import map
+import clickable
 import const
 
 
@@ -11,7 +12,7 @@ class Game:
 
         # screen config
         self.screen = pygame.display.set_mode(
-            (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION) 
+            (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION + const.BOARD_RESOLUTION // 8) 
         )
         pygame.display.set_caption("Mini Chess")
 
@@ -23,6 +24,10 @@ class Game:
 
         # init map
         self.map: map.Map = map.Map()
+        self.button_start: clickable.Button = clickable.Button(
+            text = "start",
+            position = (0, const.BOARD_RESOLUTION * const.TILE_SIZE)
+        )
 
     def input(self) -> None:
         """
@@ -48,8 +53,8 @@ class Game:
         game logic
         """
 
-        if type(position.turn) == Player: position.turn.handle_input(position)
-        else: position.turn.play_best_turn(position)
+        # if type(position.turn) == Player: position.turn.handle_input(position)
+        # else: position.turn.play_best_turn(position)
 
     def render(self) -> None:
         """
@@ -64,6 +69,7 @@ class Game:
         # objects to draw on screen
 
         objects.append(self.map.get_map())
+        objects.append(self.button_start.get_map())
 
         # display -----------------------------------------------
 

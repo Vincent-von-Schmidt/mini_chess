@@ -31,7 +31,7 @@ class Button( Clickable_object ):
         self.text: pygame.surface.Surface = const.FONT.render(
             text = text,
             antialias = False,
-            color = (111, 196, 213)
+            color = (0, 0, 0)
         )
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(

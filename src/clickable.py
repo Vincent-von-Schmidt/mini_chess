@@ -1,4 +1,5 @@
 import pygame
+from typing import Callable
 
 import const
 
@@ -7,12 +8,12 @@ class Clickable_object:
     def __init__(self, position: tuple[int, int]) -> None:
 
         self.position: tuple[int, int] = position
-        self.clicked: function | None = None
+        self.clicked: Callable | None = None
         self.surface: pygame.surface.Surface | None = None
         self.highlight: tuple[int, int, int] | None = None
 
-    def set_clicked(self, function: function) -> None:
-        self.clicked = function
+    def set_clicked(self, clicked: Callable) -> None:
+        self.clicked = clicked
 
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
@@ -29,9 +30,7 @@ class Button( Clickable_object ):
         super().__init__(position)
 
         self.text: pygame.surface.Surface = const.FONT.render(
-            text = text,
-            antialias = False,
-            color = (0, 0, 0)
+            text, False, (0, 0, 0)
         )
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(

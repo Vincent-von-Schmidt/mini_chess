@@ -2,6 +2,7 @@ import pygame
 
 import map
 import const
+import position
 
 
 class Game:
@@ -48,8 +49,8 @@ class Game:
         game logic
         """
 
-        if type(position.turn) == Player: position.turn.handle_input(position)
-        else: position.turn.play_best_turn(position)
+        if type(position.next) == Player: position.next.handle_input(position)
+        else: position.next.play_best_turn(position)
 
     def render(self) -> None:
         """

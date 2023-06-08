@@ -12,7 +12,8 @@ class Game:
 
         # screen config
         self.screen = pygame.display.set_mode(
-            (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION + const.BOARD_RESOLUTION // 8) 
+            # (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION + const.BOARD_RESOLUTION // 4) 
+            const.WINDOW_RESOLUTION
         )
         pygame.display.set_caption("Mini Chess")
 
@@ -26,7 +27,7 @@ class Game:
         self.map: map.Map = map.Map()
         self.button_start: clickable.Button = clickable.Button(
             text = "start",
-            position = (0, const.BOARD_RESOLUTION * const.TILE_SIZE)
+            position = (0, const.BOARD_RESOLUTION[1])
         )
 
     def input(self) -> None:
@@ -61,34 +62,43 @@ class Game:
         renders the screen
         """
 
-        # objects -----------------------------------------------
+        # objects_board -----------------------------------------------
 
-        # queue with all objects to draw
-        objects: list = []
+        # queue with all objects_board to draw
+        objects_board: list = []
+        objects_window: list = []
 
-        # objects to draw on screen
+        # objects_board to draw on screen
 
-        objects.append(self.map.get_map())
-        objects.append(self.button_start.get_map())
+        objects_board.append(self.map.get_map())
+
+        objects_window.append(self.button_start.get_map())
 
         # display -----------------------------------------------
 
-        # create unscaled surface to draw all objects on
-        original_surface: pygame.surface.Surface =  pygame.surface.Surface(
+        # create unscaled surface to draw all objects_board on
+        original_surface_board: pygame.surface.Surface =  pygame.surface.Surface(
             # calc initial surface resolution befor upscaling
             (const.RATIO[0] * const.TILE_SIZE, const.RATIO[1] * const.TILE_SIZE)
         )
-        original_surface.fill((0, 0, 0)) # fill black
-        original_surface.blits(objects) # draw objects on surface
+        original_surface_board.fill((0, 0, 0)) # fill black
+        original_surface_board.blits(objects_board) # draw objects_board on surface
 
         # upscale drawn surface
-        scaled_surface: pygame.surface.Surface = pygame.transform.scale(
-            original_surface, # source -> unscaled surface
-            (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION) # resolution
+        scaled_surface_board: pygame.surface.Surface = pygame.transform.scale(
+            original_surface_board, # source -> unscaled surface
+            const.BOARD_RESOLUTION
         )
 
+        main_window_surface: pygame.surface.Surface = pygame.surface.Surface(
+            const.WINDOW_RESOLUTION
+        )
+
+        main_window_surface.blit(scaled_surface_board, (0, 0))
+        main_window_surface.blits(objects_window)
+
         # draw upscaled surface on main screen
-        self.screen.blit(scaled_surface, (0, 0))
+        self.screen.blit(main_window_surface, (0, 0))
         pygame.display.flip() # update screen
 
     def wait(self) -> None:

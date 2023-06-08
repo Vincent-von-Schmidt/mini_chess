@@ -29,13 +29,19 @@ class Button( Clickable_object ):
     def __init__(self, text: str, position: tuple[int, int]) -> None:
         super().__init__(position)
 
-        self.text: pygame.surface.Surface = const.FONT.render(
+        # self.text: pygame.surface.Surface = const.FONT.render(
+        #     text, False, (0, 0, 0)
+        # )
+        
+        self.surface: pygame.surface.Surface = pygame.surface.Surface(
+            (const.BOARD_RESOLUTION[0], const.BOARD_RESOLUTION[1] // 4)
+        )
+        
+        font: pygame.font.Font = pygame.font.SysFont( const.FONT[0], const.FONT[1] )
+        self.text: pygame.surface.Surface = font.render(
             text, False, (0, 0, 0)
         )
 
-        self.surface: pygame.surface.Surface = pygame.surface.Surface(
-            (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION / 8)
-        )
         self.surface.fill( (111, 196, 213) )
 
         self.surface.blit(

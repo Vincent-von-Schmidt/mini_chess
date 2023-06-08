@@ -54,13 +54,9 @@ class Game:
         game logic
         """
 
-<<<<<<< HEAD
-        if type(position.next) == Player: position.next.handle_input(position)
-        else: position.next.play_best_turn(position)
-=======
-        # if type(position.turn) == Player: position.turn.handle_input(position)
-        # else: position.turn.play_best_turn(position)
->>>>>>> 0a979b7ee566e6a811d517efe6f2147cb81f20ff
+        # if type(position.next) == Player: position.next.handle_input(position)
+        # else: position.next.play_best_turn(position)
+        pass
 
     def render(self) -> None:
         """

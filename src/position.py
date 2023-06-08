@@ -22,6 +22,7 @@ class Position:
     
     def get_possible_turns() -> list:
         turns = []
+        
         return turns
     
     def check_end() -> bool:

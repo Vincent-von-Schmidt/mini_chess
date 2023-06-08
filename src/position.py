@@ -25,5 +25,25 @@ class Position:
         
         return turns
     
+    def find_turns(self, x,y,n,fld,mtr,tp) -> list:
+        turns = []
+        for i in range(const.RATIO[0]):
+            for j in range(const.RATIO[1]):
+                p = const.MATRIX_RAT*(const.MATRIX_POS+i-y) + const.MATRIX_POS+x+j
+                n2 = const.RATIO[0]*i + j
+                print(fld[n2])
+                if tp == const.ATTACK:
+                    if mtr[p] == 0: continue
+                    if fld[n2] == 0: continue
+                    if (fld[n2]/abs(fld[n2])) != fld[n]/abs(fld[n]):
+                        turns += [n, n2]
+                else:
+                    if mtr[p] != 1: continue
+                    if fld[n2] != 0: continue
+                    # kann noch nicht mehrere in eine Richtung gehen
+                    turns += [n, n2]
+        print(turns)
+        return turns
+    
     def check_end() -> bool:
         pass

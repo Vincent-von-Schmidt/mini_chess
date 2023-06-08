@@ -5,15 +5,21 @@ import const
 
 
 class Clickable_object:
-    def __init__(self, position: tuple[int, int]) -> None:
+    def __init__(
+        self,
+        position: tuple[int, int],
+        on_click: Callable | None = None,
+        highlight: tuple[int, int, int] | None = None
+    ) -> None:
 
         self.position: tuple[int, int] = position
-        self.clicked: Callable | None = None
+        self.on_click: Callable | None = on_click
+        self.highlight: tuple[int, int, int] | None = highlight
         self.surface: pygame.surface.Surface | None = None
-        self.highlight: tuple[int, int, int] | None = None
 
-    def set_clicked(self, clicked: Callable) -> None:
-        self.clicked = clicked
+
+    def set_clicked(self, on_click: Callable) -> None:
+        self.on_click = on_click
 
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
@@ -24,15 +30,32 @@ class Clickable_object:
     def get_map(self) -> list:
         return [self.surface, self.position]
 
+    def is_hover(self) -> bool:
+
+        mouse_position: tuple[int, int] = pygame.mouse.get_pos()
+
+        if ( mouse_position[0] >= self.position[0] and mouse_position[0] <= self.position[0] + self.surface.get_width()
+            and mouse_position[1] >= self.position[1] and mouse_position[1] <= self.position[1] + self.surface.get_height()):
+
+            return True
+
+        return False
+
+    def update(self, event) -> None:
+
+        if self.is_hover():
+
+            # if self.highlight != None:
+            #     self.surface.fill( self.highlight )
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                self.on_click()
+
 
 class Button( Clickable_object ):
-    def __init__(self, text: str, position: tuple[int, int]) -> None:
-        super().__init__(position)
+    def __init__(self, text: str, position: tuple[int, int], on_click: Callable | None = None) -> None:
+        super().__init__(position, on_click)
 
-        # self.text: pygame.surface.Surface = const.FONT.render(
-        #     text, False, (0, 0, 0)
-        # )
-        
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.BOARD_RESOLUTION[0], const.BOARD_RESOLUTION[1] // 4)
         )

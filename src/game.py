@@ -28,7 +28,8 @@ class Game:
         self.map: map.Map = map.Map()
         self.button_start: clickable.Button = clickable.Button(
             text = "start",
-            position = (0, const.BOARD_RESOLUTION[1])
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = lambda: print("clicked")
         )
 
     def input(self) -> None:
@@ -45,6 +46,8 @@ class Game:
             # if clicked on the close button -> break game loop
             if event.type == pygame.QUIT:
                 self.running: bool = False
+
+            self.button_start.update(event)
 
         # close window on key e -> faster keyboard control
         if keys[pygame.K_e]:

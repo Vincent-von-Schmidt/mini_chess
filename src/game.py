@@ -28,7 +28,13 @@ class Game:
         self.map: map.Map = map.Map()
         self.button_start: clickable.Button = clickable.Button(
             text = "start",
-            position = (0, const.BOARD_RESOLUTION[1])
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = lambda: print("clicked"),
+            highlight = (89, 170, 186)
+        )
+        self.test_figure: clickable.Figure = clickable.Figure(
+            position = (100, 100),
+            color = (155, 155, 155)
         )
 
     def input(self) -> None:
@@ -45,6 +51,8 @@ class Game:
             # if clicked on the close button -> break game loop
             if event.type == pygame.QUIT:
                 self.running: bool = False
+
+            self.button_start.update(event)
 
         # close window on key e -> faster keyboard control
         if keys[pygame.K_e]:
@@ -73,6 +81,7 @@ class Game:
         # objects_board to draw on screen
 
         objects_board.append(self.map.get_map())
+        objects_board.append(self.test_figure.get_map())
 
         objects_window.append(self.button_start.get_map())
 
@@ -115,15 +124,9 @@ class Game:
         game loop
         """
 
-        pygame.init()
-        pygame.font.init()
-
         while self.running:
 
             self.input()
             self.update()
             self.render()
             self.wait()
-
-        pygame.font.quit()
-        pygame.quit()

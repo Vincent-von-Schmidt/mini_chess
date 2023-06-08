@@ -52,8 +52,15 @@ class Clickable_object:
 
 
 class Button( Clickable_object ):
-    def __init__(self, text: str, position: tuple[int, int], on_click: Callable | None = None) -> None:
-        super().__init__(position, on_click)
+    def __init__(
+        self,
+        text: str,
+        position: tuple[int, int],
+        on_click: Callable | None = None,
+        highlight: tuple[int, int, int] | None = None
+    ) -> None:
+
+        super().__init__(position, on_click, highlight)
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.BOARD_RESOLUTION[0], const.BOARD_RESOLUTION[1] // 4)
@@ -64,7 +71,7 @@ class Button( Clickable_object ):
             text, False, (0, 0, 0)
         )
 
-        self.surface.fill( (111, 196, 213) )
+        self.surface.fill( (81, 145, 158) )
 
         self.surface.blit(
             source = self.text,
@@ -84,6 +91,9 @@ class Figure( Clickable_object ):
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE)
         )
+
+        self.surface.set_alpha(128)
+
         pygame.draw.circle(
             surface = self.surface,
             color = color,

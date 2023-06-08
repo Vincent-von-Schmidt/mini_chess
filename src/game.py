@@ -119,7 +119,7 @@ class Game:
         """
 
         pygame.init()
-        pygame.font.init()
+        # pygame.font.init()
 
         while self.running:
 
@@ -128,5 +128,5 @@ class Game:
             self.render()
             self.wait()
 
-        pygame.font.quit()
+        # pygame.font.quit()
         pygame.quit()

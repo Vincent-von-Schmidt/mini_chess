@@ -17,7 +17,6 @@ class Clickable_object:
         self.highlight: tuple[int, int, int] | None = highlight
         self.surface: pygame.surface.Surface | None = None
 
-
     def set_clicked(self, on_click: Callable) -> None:
         self.on_click = on_click
 
@@ -34,8 +33,8 @@ class Clickable_object:
 
         mouse_position: tuple[int, int] = pygame.mouse.get_pos()
 
-        if ( mouse_position[0] >= self.position[0] and mouse_position[0] <= self.position[0] + self.surface.get_width()
-            and mouse_position[1] >= self.position[1] and mouse_position[1] <= self.position[1] + self.surface.get_height()):
+        if ( mouse_position[0] >= self.position[0] and mouse_position[0] <= self.position[0] + self.surface.get_width() # x
+            and mouse_position[1] >= self.position[1] and mouse_position[1] <= self.position[1] + self.surface.get_height()): # y
 
             return True
 
@@ -45,8 +44,8 @@ class Clickable_object:
 
         if self.is_hover():
 
-            # if self.highlight != None:
-            #     self.surface.fill( self.highlight )
+            if self.highlight != None:
+                self.surface.fill( self.highlight )
 
             if event.type == pygame.MOUSEBUTTONUP:
                 self.on_click()

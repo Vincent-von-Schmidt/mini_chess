@@ -4,6 +4,14 @@ import const
 
 
 class Tile:
+
+    # id
+    # __instances: int = 0
+    #
+    # def __new__(cls, texture: tuple[int, ...] | str):
+    #     cls.__instances += 1
+    #     return Tile.__init__( texture )
+
     def __init__(self, texture: tuple[int, ...] | str) -> None:
         """
         texture: tuple[int, ...] -> RBGA color code
@@ -12,6 +20,9 @@ class Tile:
 
         texture: str -> path to image file
         """
+
+        self.position: tuple[int, int] | None = None
+        # self.id: int = self.__instances
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
@@ -32,6 +43,15 @@ class Tile:
         # color code given -> fill tile with given color
         elif texture_type == tuple:
             self.surface.fill( texture )
+
+    def get_surface(self) -> pygame.surface.Surface:
+        return self.surface
+
+    def set_position(self, coordinates: tuple[int, int]) -> None:
+        self.position = coordinates
+
+    def get_position(self) -> tuple[int, int]:
+        return self.position
 
 
 class Map:
@@ -89,10 +109,13 @@ class Map:
                 # drawing coordinates
                 x: int = sum( widths )
                 y: int = sum( heights )
+                destination: tuple[int, int] = ( x, y )
+
+                tile.set_position( destination )
 
                 self.surface.blit(
                     source = tile.surface,
-                    dest = ( x, y )
+                    dest = destination
                 )
 
                 widths.append( tile.surface.get_width() )
@@ -103,3 +126,6 @@ class Map:
 
     def get_map(self) -> list:
         return [(self.surface), (0, 0)]
+
+    def get_construct_matrix(self) -> list[list[Tile]]:
+        return self.construct_matrix

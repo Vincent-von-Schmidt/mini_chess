@@ -2,6 +2,7 @@ import pygame
 from typing import Callable
 
 import const
+import map
 
 
 class Clickable_object:
@@ -44,11 +45,14 @@ class Clickable_object:
 
         if self.is_hover():
 
-            if self.highlight != None:
-                self.surface.fill( self.highlight )
+            # hover color change
+            self.surface.set_alpha(150)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 self.on_click()
+
+        # reset hover color to none
+        else: self.surface.set_alpha(255)
 
 
 class Button( Clickable_object ):
@@ -62,43 +66,70 @@ class Button( Clickable_object ):
 
         super().__init__(position, on_click, highlight)
 
+        self.text: pygame.surface.Surface | None = None
+
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.BOARD_RESOLUTION[0], const.BOARD_RESOLUTION[1] // 4)
         )
         
-        font: pygame.font.Font = pygame.font.SysFont( const.FONT[0], const.FONT[1] )
-        self.text: pygame.surface.Surface = font.render(
-            text, False, (0, 0, 0)
-        )
+        self.font: pygame.font.Font = pygame.font.SysFont( const.FONT[0], const.FONT[1] )
+        self.set_text( text )
+
+        self.render()
+
+    def render(self) -> None:
 
         self.surface.fill( (81, 145, 158) )
 
         self.surface.blit(
-            source = self.text,
-            dest = (
-                self.surface.get_width() // 2 - self.text.get_width() // 2,
-                self.surface.get_height() // 2 - self.text.get_height() // 2
-            )
-        )
+                source = self.text,
+                dest = (
+                    self.surface.get_width() // 2 - self.text.get_width() // 2,
+                    self.surface.get_height() // 2 - self.text.get_height() // 2
+                    )
+                )
 
         self.set_geometry( self.surface )
 
-
-class Figure( Clickable_object ):
-    def __init__(self, position: tuple[int, int], color: tuple[int, int, int]) -> None:
-        super().__init__(position)
-
-        self.surface: pygame.surface.Surface = pygame.surface.Surface(
-            (const.TILE_SIZE, const.TILE_SIZE)
+    def set_text(self, text: str) -> None:
+        self.text = self.font.render(
+            text, False, (0, 0, 0)
         )
 
-        self.surface.set_alpha(128)
+
+class Figure( Clickable_object ):
+    
+    # EXPERIMENTAL -> TODO -> only create two per player and if already existing replace
+    # __instance: list[list[Figure]] = [[], []]
+    #
+    # def __new__(cls, *args, **kwargs) -> cls:
+    #     if len( cls.__instance[0] ) <= 2:
+    #         cls.__instance[0].append(Figure)
+    #         super().__new__(cls, *args, **kwargs)
+    #         return cls
+
+    def __init__(
+        self,
+        # position: tuple[int, int],
+        color: tuple[int, int, int],
+        tile: map.Tile
+    ) -> None:
+
+        super().__init__(
+            position = (tile.get_position())
+        )
+
+        # self.surface: pygame.surface.Surface = pygame.surface.Surface(
+        #     (const.TILE_SIZE, const.TILE_SIZE)
+        # )
+
+        # self.surface.set_alpha(0)
 
         pygame.draw.circle(
-            surface = self.surface,
+            surface = tile.get_surface(),
             color = color,
             center = (const.TILE_SIZE // 2, const.TILE_SIZE // 2),
             radius = const.TILE_SIZE // 2 - 2 # slidly smaller than the tile
         )
 
-        self.set_geometry( self.surface )
+        self.set_geometry( tile.get_surface() )

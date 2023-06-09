@@ -33,8 +33,9 @@ class Game:
             highlight = (89, 170, 186)
         )
         self.test_figure: clickable.Figure = clickable.Figure(
-            position = (100, 100),
-            color = (155, 155, 155)
+            # position = (100, 100),
+            color = (155, 155, 155),
+            tile = self.map.get_construct_matrix()[0][0]
         )
 
     def input(self) -> None:

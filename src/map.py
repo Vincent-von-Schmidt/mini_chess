@@ -5,12 +5,15 @@ import const
 
 class Tile:
 
-    # id
-    # __instances: int = 0
-    #
-    # def __new__(cls, texture: tuple[int, ...] | str):
-    #     cls.__instances += 1
-    #     return Tile.__init__( texture )
+    __number_instances: int = -1 
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        counts the created objects to use as id
+        """
+
+        cls.__number_instances += 1
+        return super().__new__(cls)
 
     def __init__(self, texture: tuple[int, ...] | str) -> None:
         """
@@ -22,7 +25,7 @@ class Tile:
         """
 
         self.position: tuple[int, int] | None = None
-        # self.id: int = self.__instances
+        self.id: int = self.__number_instances
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
@@ -52,6 +55,9 @@ class Tile:
 
     def get_position(self) -> tuple[int, int]:
         return self.position
+
+    def get_id(self) -> int:
+        return self.id
 
 
 class Map:
@@ -129,3 +135,16 @@ class Map:
 
     def get_construct_matrix(self) -> list[list[Tile]]:
         return self.construct_matrix
+
+    def get_tile_by_id(self, id: int) -> Tile:
+        """
+        returns the tile with the given id
+        """
+
+        for row in self.construct_matrix:
+            for tile in row:
+
+                if tile.get_id() == id:
+                    return tile
+
+        raise NotImplementedError( f"No tile with the id: {id} found." )

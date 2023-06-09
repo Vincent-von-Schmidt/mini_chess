@@ -13,7 +13,6 @@ class Game:
 
         # screen config
         self.screen = pygame.display.set_mode(
-            # (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION + const.BOARD_RESOLUTION // 4) 
             const.WINDOW_RESOLUTION
         )
         pygame.display.set_caption("Mini Chess")
@@ -32,10 +31,23 @@ class Game:
             on_click = lambda: print("clicked"),
             highlight = (89, 170, 186)
         )
-        self.test_figure: clickable.Figure = clickable.Figure(
-            # position = (100, 100),
-            color = (155, 155, 155),
-            tile = self.map.get_construct_matrix()[0][0]
+
+        # init figures
+        self.player1_figure1: clickable.Figure = clickable.Figure(
+            color = const.PLAYER_COLOR_A,
+            tile = self.map.get_tile_by_id(1)
+        )
+        self.player1_figure2: clickable.Figure = clickable.Figure(
+            color = const.PLAYER_COLOR_A,
+            tile = self.map.get_tile_by_id(2)
+        )
+        self.player2_figure1: clickable.Figure = clickable.Figure(
+            color = const.PLAYER_COLOR_B,
+            tile = self.map.get_tile_by_id(6)
+        )
+        self.player2_figure2: clickable.Figure = clickable.Figure(
+            color = const.PLAYER_COLOR_B,
+            tile = self.map.get_tile_by_id(7)
         )
 
     def input(self) -> None:
@@ -54,10 +66,10 @@ class Game:
                 self.running: bool = False
 
             self.button_start.update(event)
-
-        # close window on key e -> faster keyboard control
-        if keys[pygame.K_e]:
-            self.running: bool = False
+            self.player1_figure1.update(event)
+            self.player1_figure2.update(event)
+            self.player2_figure1.update(event)
+            self.player2_figure2.update(event)
 
     def update(self) -> None:
         """
@@ -82,7 +94,10 @@ class Game:
         # objects_board to draw on screen
 
         objects_board.append(self.map.get_map())
-        objects_board.append(self.test_figure.get_map())
+        objects_board.append(self.player1_figure1.get_map())
+        objects_board.append(self.player1_figure2.get_map())
+        objects_board.append(self.player2_figure1.get_map())
+        objects_board.append(self.player2_figure2.get_map())
 
         objects_window.append(self.button_start.get_map())
 

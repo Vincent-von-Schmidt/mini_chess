@@ -49,7 +49,9 @@ class Clickable_object:
             self.surface.set_alpha(150)
 
             if event.type == pygame.MOUSEBUTTONUP:
-                self.on_click()
+
+                if self.on_click != None:
+                    self.on_click()
 
         # reset hover color to none
         else: self.surface.set_alpha(255)
@@ -110,7 +112,6 @@ class Figure( Clickable_object ):
 
     def __init__(
         self,
-        # position: tuple[int, int],
         color: tuple[int, int, int],
         tile: map.Tile
     ) -> None:
@@ -119,17 +120,11 @@ class Figure( Clickable_object ):
             position = (tile.get_position())
         )
 
-        # self.surface: pygame.surface.Surface = pygame.surface.Surface(
-        #     (const.TILE_SIZE, const.TILE_SIZE)
-        # )
-
-        # self.surface.set_alpha(0)
-
         pygame.draw.circle(
             surface = tile.get_surface(),
             color = color,
             center = (const.TILE_SIZE // 2, const.TILE_SIZE // 2),
-            radius = const.TILE_SIZE // 2 - 2 # slidly smaller than the tile
+            radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the tile
         )
 
         self.set_geometry( tile.get_surface() )

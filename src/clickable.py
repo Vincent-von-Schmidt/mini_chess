@@ -116,15 +116,25 @@ class Figure( Clickable_object ):
         tile: map.Tile
     ) -> None:
 
+        self.color: tuple[int, int, int] = color
+        self.tile: map.Tile = tile
+        self.render()
+
+    def update_tile(self, tile: map.Tile) -> None:
+        self.tile = tile
+        self.render()
+
+    def render(self) -> None:
+
         super().__init__(
-            position = (tile.get_position())
+            position = (self.tile.get_position())
         )
 
         pygame.draw.circle(
-            surface = tile.get_surface(),
-            color = color,
+            surface = self.tile.get_surface(),
+            color = self.color,
             center = (const.TILE_SIZE // 2, const.TILE_SIZE // 2),
-            radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the tile
+            radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
         )
 
-        self.set_geometry( tile.get_surface() )
+        self.set_geometry( self.tile.get_surface() )

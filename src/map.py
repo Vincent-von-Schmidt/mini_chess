@@ -5,7 +5,7 @@ import const
 
 class Tile:
 
-    __number_instances: int = -1 
+    __number_instances: int = 0 
     
     def __new__(cls, *args, **kwargs):
         """
@@ -25,7 +25,7 @@ class Tile:
         """
 
         self.position: tuple[int, int] | None = None
-        self.id: int = self.__number_instances
+        self.id: int = self.__number_instances - 1 # indexing starts at 0
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 

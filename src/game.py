@@ -25,30 +25,34 @@ class Game:
 
         # init map
         self.map: map.Map = map.Map()
-        self.button_start: clickable.Button = clickable.Button(
+
+        # clickable objects
+        self.clickable_objects: list = []
+
+        self.clickable_objects.append( clickable.Button(
             text = "start",
             position = (0, const.BOARD_RESOLUTION[1]),
             on_click = lambda: print("clicked"),
             highlight = (89, 170, 186)
-        )
+        ))
 
         # init figures
-        self.player1_figure1: clickable.Figure = clickable.Figure(
+        self.clickable_objects.append( clickable.Figure(
             color = const.PLAYER_COLOR_A,
             tile = self.map.get_tile_by_id(1)
-        )
-        self.player1_figure2: clickable.Figure = clickable.Figure(
+        ))
+        self.clickable_objects.append( clickable.Figure(
             color = const.PLAYER_COLOR_A,
             tile = self.map.get_tile_by_id(2)
-        )
-        self.player2_figure1: clickable.Figure = clickable.Figure(
+        ))
+        self.clickable_objects.append( clickable.Figure(
             color = const.PLAYER_COLOR_B,
             tile = self.map.get_tile_by_id(6)
-        )
-        self.player2_figure2: clickable.Figure = clickable.Figure(
+        ))
+        self.clickable_objects.append( clickable.Figure(
             color = const.PLAYER_COLOR_B,
             tile = self.map.get_tile_by_id(7)
-        )
+        ))
 
     def input(self) -> None:
         """
@@ -65,11 +69,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running: bool = False
 
-            self.button_start.update(event)
-            self.player1_figure1.update(event)
-            self.player1_figure2.update(event)
-            self.player2_figure1.update(event)
-            self.player2_figure2.update(event)
+            for object in self.clickable_objects:
+                object.update(event)
 
     def update(self) -> None:
         """
@@ -94,12 +95,14 @@ class Game:
         # objects_board to draw on screen
 
         objects_board.append(self.map.get_map())
-        objects_board.append(self.player1_figure1.get_map())
-        objects_board.append(self.player1_figure2.get_map())
-        objects_board.append(self.player2_figure1.get_map())
-        objects_board.append(self.player2_figure2.get_map())
+        for object in self.clickable_objects:
 
-        objects_window.append(self.button_start.get_map())
+            if isinstance( object, clickable.Button ):
+                objects_window.append( object.get_map() )
+            elif isinstance( object, clickable.Figure ):
+                objects_board.append( object.get_map() )
+
+        # objects_window.append(self.button_start.get_map())
 
         # display -----------------------------------------------
 

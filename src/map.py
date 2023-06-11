@@ -148,3 +148,21 @@ class Map:
                     return tile
 
         raise NotImplementedError( f"No tile with the id: {id} found." )
+
+    def get_tile_by_hover( self ) -> Tile:
+        """
+        return hoverd tile
+        """
+
+        mouse_position: tuple[int, int] = pygame.mouse.get_pos()
+
+        for row in self.construct_matrix:
+            for tile in row:
+
+                tile_coordinats: tuple[int, int] = tile.get_position()
+                tile_surface: pygame.surface.Surface = tile.get_surface()
+                
+                if ( mouse_position[0] >= tile_coordinats[0] and mouse_position[0] <= tile_coordinats[0] + tile_surface.get_width() # x
+                    and mouse_position[1] >= tile_coordinats[1] and mouse_position[1] <= tile_coordinats[1] + tile_surface.get_height()): # y
+
+                    return tile

@@ -66,11 +66,22 @@ class Game:
         for event in events:
 
             # if clicked on the close button -> break game loop
-            if event.type == pygame.QUIT:
-                self.running: bool = False
+            # if event.type == pygame.QUIT:
+            match event.type:
+
+                case pygame.QUIT:
+                    self.running: bool = False
+
+                case pygame.MOUSEBUTTONUP:
+                    self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
 
             for object in self.clickable_objects:
                 object.update(event)
+
+        # close window on key e -> faster keyboard control
+        if keys[pygame.K_e]:
+            self.running: bool = False
+
 
     def update(self) -> None:
         """

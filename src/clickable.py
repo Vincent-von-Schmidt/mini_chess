@@ -10,13 +10,14 @@ class Clickable_object:
         self,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: tuple[int, int, int] | None = None
+        highlight: bool = False
     ) -> None:
 
         self.position: tuple[int, int] = position
         self.on_click: Callable | None = on_click
-        self.highlight: tuple[int, int, int] | None = highlight
+        self.highlight: bool = highlight
         self.surface: pygame.surface.Surface | None = None
+        self.non_highlighted_surface: pygame.surface.Surface | None = None
 
     def set_clicked(self, on_click: Callable) -> None:
         self.on_click = on_click
@@ -24,8 +25,17 @@ class Clickable_object:
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
 
-    def set_highlight(self, color: tuple[int, int, int]) -> None:
-        self.highlight = color
+    def set_highlight(self, set: bool) -> None:
+        self.highlight = set
+
+        if self.highlight:
+
+            self.non_highlighted_surface = self.surface
+            self.surface.fill( (255, 255, 0) )
+
+        else:
+
+            self.surface = self.non_highlighted_surface
 
     def get_map(self) -> list:
         return [self.surface, self.position]
@@ -63,7 +73,7 @@ class Button( Clickable_object ):
         text: str,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: tuple[int, int, int] | None = None
+        highlight: bool = False
     ) -> None:
 
         super().__init__(position, on_click, highlight)
@@ -101,15 +111,6 @@ class Button( Clickable_object ):
 
 class Figure( Clickable_object ):
     
-    # EXPERIMENTAL -> TODO -> only create two per player and if already existing replace
-    # __instance: list[list[Figure]] = [[], []]
-    #
-    # def __new__(cls, *args, **kwargs) -> cls:
-    #     if len( cls.__instance[0] ) <= 2:
-    #         cls.__instance[0].append(Figure)
-    #         super().__new__(cls, *args, **kwargs)
-    #         return cls
-
     def __init__(
         self,
         color: tuple[int, int, int],

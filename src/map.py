@@ -50,6 +50,20 @@ class Tile:
     def get_surface(self) -> pygame.surface.Surface:
         return self.surface
 
+    def is_hover(self) -> bool:
+        """
+        returns true if tile is hoverd
+        """
+
+        mouse_position: tuple[int, int] = pygame.mouse.get_pos()
+
+        if ( mouse_position[0] >= self.position[0] and mouse_position[0] <= self.position[0] + self.surface.get_width() # x
+            and mouse_position[1] >= self.position[1] and mouse_position[1] <= self.position[1] + self.surface.get_height()): # y
+
+            return True
+
+        return False
+
     def set_position(self, coordinates: tuple[int, int]) -> None:
         self.position = coordinates
 
@@ -159,10 +173,5 @@ class Map:
         for row in self.construct_matrix:
             for tile in row:
 
-                tile_coordinats: tuple[int, int] = tile.get_position()
-                tile_surface: pygame.surface.Surface = tile.get_surface()
-                
-                if ( mouse_position[0] >= tile_coordinats[0] and mouse_position[0] <= tile_coordinats[0] + tile_surface.get_width() # x
-                    and mouse_position[1] >= tile_coordinats[1] and mouse_position[1] <= tile_coordinats[1] + tile_surface.get_height()): # y
-
+                if tile.is_hover():
                     return tile

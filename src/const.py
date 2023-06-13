@@ -22,6 +22,7 @@ for y in range(MATRIX_RAT):
             PAWN_MOV.append(0)
         else:
             PAWN_MOV.append(1)
+print(PAWN_MOV)
 
 PAWN_ATK = []
 for y in range(MATRIX_RAT):

@@ -4,6 +4,7 @@ import map
 import clickable
 import const
 import position
+import input_handler
 
 
 class Game:
@@ -54,6 +55,14 @@ class Game:
         ))
 
         self.tmp: bool = True
+        self.player1: input_handler.Player = input_handler.Player()
+        self.player2: input_handler.Player = input_handler.Player()
+        self.position: position.Position = position.Position(
+            self.player1,
+            self.player2,
+            cur = self.player1,
+            field = [0, -1, -1, 0, 0, 0, 1, 1, 0]
+        )
 
     def input(self) -> None:
         """
@@ -92,6 +101,19 @@ class Game:
         """
         game logic
         """
+        turns = self.position.get_possible_turns()
+        print("Turns", turns)
+        if len(turns) > 0: 
+            self.position.set_turn(turns[0][0], turns[0][1])
+            print("########################## Player", self.position.turn, "####################################")
+            print(self.position.field)
+        else: 
+            print("Ende")
+            print(self.position.field)
+            print(self.position.history)
+            pass
+
+        
 
         # if type(position.next) == Player: position.next.handle_input(position)
         # else: position.next.play_best_turn(position)

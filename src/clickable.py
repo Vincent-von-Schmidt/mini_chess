@@ -10,12 +10,11 @@ class Clickable_object:
         self,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: bool = False
     ) -> None:
 
         self.position: tuple[int, int] = position
         self.on_click: Callable | None = on_click
-        self.highlight: bool = highlight
+        self.highlight: bool = False
         self.surface: pygame.surface.Surface | None = None
         self.non_highlighted_surface: pygame.surface.Surface | None = None
 
@@ -24,18 +23,20 @@ class Clickable_object:
 
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
+        self.non_highlighted_surface = self.surface
 
-    def set_highlight(self, set: bool) -> None:
-        self.highlight = set
+    def set_highlight(self) -> None:
 
         if self.highlight:
 
             self.non_highlighted_surface = self.surface
             self.surface.fill( (255, 255, 0) )
+            self.highlight = False
 
         else:
 
             self.surface = self.non_highlighted_surface
+            self.highlight = True
 
     def get_map(self) -> list:
         return [self.surface, self.position]
@@ -73,10 +74,9 @@ class Button( Clickable_object ):
         text: str,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: bool = False
     ) -> None:
 
-        super().__init__(position, on_click, highlight)
+        super().__init__(position, on_click)
 
         self.text: pygame.surface.Surface | None = None
 

@@ -33,7 +33,6 @@ class Game:
             text = "start",
             position = (0, const.BOARD_RESOLUTION[1]),
             on_click = lambda: print("clicked"),
-            highlight = (89, 170, 186)
         ))
 
         # init figures
@@ -54,6 +53,8 @@ class Game:
             tile = self.map.get_tile_by_id(7)
         ))
 
+        self.tmp: bool = True
+
     def input(self) -> None:
         """
         key input + reaction
@@ -73,7 +74,11 @@ class Game:
                     self.running: bool = False
 
                 case pygame.MOUSEBUTTONUP:
-                    self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
+                    if event.button == 1: # left click
+                        self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
+
+                    elif event.button == 3: # right click
+                        self.clickable_objects[3].set_highlight()
 
             for object in self.clickable_objects:
                 object.update(event)

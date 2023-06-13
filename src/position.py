@@ -54,19 +54,19 @@ class Position:
                     if mtr[p] == 0: continue
                     if fld[n2] == 0: continue
                     if (fld[n2]/abs(fld[n2])) != fld[n]/abs(fld[n]):
-                        print(n, "kann", n2, "schlagen")
+                        # print(n, "kann", n2, "schlagen")
                         turns.append([n, n2])
                 else:
                     if mtr[p] == 1: continue
                     if fld[n2] != 0: continue
                     # kann noch nicht mehrere in eine Richtung gehen
-                    print(n, "kann nach", n2, "moven")
+                    # print(n, "kann nach", n2, "moven")
                     turns.append([n, n2])
         if pl == -1:
             for i in range(len(turns)):
                 for j in range(2):
                     turns[i][j] = (const.RATIO[0]*const.RATIO[1]-1)-turns[i][j]
-        print(turns)
+        # print(turns)
         return turns
     
     def check_end() -> bool:

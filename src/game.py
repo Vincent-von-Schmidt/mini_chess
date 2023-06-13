@@ -101,23 +101,22 @@ class Game:
         """
         game logic
         """
-        turns = self.position.get_possible_turns()
-        print("Turns", turns)
-        if len(turns) > 0: 
-            self.position.set_turn(turns[0][0], turns[0][1])
-            print("########################## Player", self.position.turn, "####################################")
-            print(self.position.field)
-        else: 
-            print("Ende")
-            print(self.position.field)
-            print(self.position.history)
-            pass
+        # turns = self.position.get_possible_turns()
+        # print("Turns", turns)
+        # if len(turns) > 0: 
+        #     self.position.set_turn(turns[0][0], turns[0][1])
+        #     print("########################## Player", self.position.turn, "####################################")
+        #     print(self.position.field)
+        # else: 
+        #     print("Ende")
+        #     print(self.position.field)
+        #     print(self.position.history)
+        #     pass
 
         
 
-        # if type(position.next) == Player: position.next.handle_input(position)
-        # else: position.next.play_best_turn(position)
-        pass
+        if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position)
+        else: self.position.cur.play_best_turn(self.position)
 
     def render(self) -> None:
         """

@@ -7,6 +7,8 @@ PLAYER_COLOR_A: tuple[int, int, int] = (91, 92, 91)
 PLAYER_COLOR_B: tuple[int, int, int] = (179, 181, 180)
 FONT: tuple[str, int] = ("Arial", 50)
 WINDOW_RESOLUTION: tuple[int, int] = (BOARD_RESOLUTION[0], BOARD_RESOLUTION[1] + BOARD_RESOLUTION[1] // 4)
+WHITE = 'white'
+BLACK = 'black'
 FIELD_EMPTY: list = [0, 1, 1, 0, 0, 0, 1, 1, 0]
 MATRIX_POS = RATIO[1]-1
 MATRIX_RAT = (RATIO[1]-1)*2 + 1
@@ -24,7 +26,7 @@ for y in range(MATRIX_RAT):
             PAWN_MOV.append(0)
         else:
             PAWN_MOV.append(1)
-print(PAWN_MOV)
+# print(PAWN_MOV)
 
 PAWN_ATK = []
 for y in range(MATRIX_RAT):
@@ -33,5 +35,5 @@ for y in range(MATRIX_RAT):
             PAWN_ATK.append(1)
         else:
             PAWN_ATK.append(0)
-print(PAWN_ATK)
+# print(PAWN_ATK)
 

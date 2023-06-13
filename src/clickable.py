@@ -2,6 +2,7 @@ import pygame
 from typing import Callable
 
 import const
+import map
 
 
 class Clickable_object:
@@ -9,13 +10,14 @@ class Clickable_object:
         self,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: tuple[int, int, int] | None = None
+        highlight: bool = False
     ) -> None:
 
         self.position: tuple[int, int] = position
         self.on_click: Callable | None = on_click
-        self.highlight: tuple[int, int, int] | None = highlight
+        self.highlight: bool = highlight
         self.surface: pygame.surface.Surface | None = None
+        self.non_highlighted_surface: pygame.surface.Surface | None = None
 
     def set_clicked(self, on_click: Callable) -> None:
         self.on_click = on_click
@@ -23,8 +25,17 @@ class Clickable_object:
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
 
-    def set_highlight(self, color: tuple[int, int, int]) -> None:
-        self.highlight = color
+    def set_highlight(self, set: bool) -> None:
+        self.highlight = set
+
+        if self.highlight:
+
+            self.non_highlighted_surface = self.surface
+            self.surface.fill( (255, 255, 0) )
+
+        else:
+
+            self.surface = self.non_highlighted_surface
 
     def get_map(self) -> list:
         return [self.surface, self.position]
@@ -44,11 +55,16 @@ class Clickable_object:
 
         if self.is_hover():
 
-            if self.highlight != None:
-                self.surface.fill( self.highlight )
+            # hover color change
+            self.surface.set_alpha(150)
 
             if event.type == pygame.MOUSEBUTTONUP:
-                self.on_click()
+
+                if self.on_click != None:
+                    self.on_click()
+
+        # reset hover color to none
+        else: self.surface.set_alpha(255)
 
 
 class Button( Clickable_object ):
@@ -57,48 +73,69 @@ class Button( Clickable_object ):
         text: str,
         position: tuple[int, int],
         on_click: Callable | None = None,
-        highlight: tuple[int, int, int] | None = None
+        highlight: bool = False
     ) -> None:
 
         super().__init__(position, on_click, highlight)
+
+        self.text: pygame.surface.Surface | None = None
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.BOARD_RESOLUTION[0], const.BOARD_RESOLUTION[1] // 4)
         )
         
-        font: pygame.font.Font = pygame.font.SysFont( const.FONT[0], const.FONT[1] )
-        self.text: pygame.surface.Surface = font.render(
-            text, False, (0, 0, 0)
-        )
+        self.font: pygame.font.Font = pygame.font.SysFont( const.FONT[0], const.FONT[1] )
+        self.set_text( text )
+
+        self.render()
+
+    def render(self) -> None:
 
         self.surface.fill( (81, 145, 158) )
 
         self.surface.blit(
-            source = self.text,
-            dest = (
-                self.surface.get_width() // 2 - self.text.get_width() // 2,
-                self.surface.get_height() // 2 - self.text.get_height() // 2
-            )
-        )
+                source = self.text,
+                dest = (
+                    self.surface.get_width() // 2 - self.text.get_width() // 2,
+                    self.surface.get_height() // 2 - self.text.get_height() // 2
+                    )
+                )
 
         self.set_geometry( self.surface )
+
+    def set_text(self, text: str) -> None:
+        self.text = self.font.render(
+            text, False, (0, 0, 0)
+        )
 
 
 class Figure( Clickable_object ):
-    def __init__(self, position: tuple[int, int], color: tuple[int, int, int]) -> None:
-        super().__init__(position)
+    
+    def __init__(
+        self,
+        color: tuple[int, int, int],
+        tile: map.Tile
+    ) -> None:
 
-        self.surface: pygame.surface.Surface = pygame.surface.Surface(
-            (const.TILE_SIZE, const.TILE_SIZE)
+        self.color: tuple[int, int, int] = color
+        self.tile: map.Tile = tile
+        self.render()
+
+    def update_tile(self, tile: map.Tile) -> None:
+        self.tile = tile
+        self.render()
+
+    def render(self) -> None:
+
+        super().__init__(
+            position = (self.tile.get_position())
         )
-
-        self.surface.set_alpha(128)
 
         pygame.draw.circle(
-            surface = self.surface,
-            color = color,
+            surface = self.tile.get_surface(),
+            color = self.color,
             center = (const.TILE_SIZE // 2, const.TILE_SIZE // 2),
-            radius = const.TILE_SIZE // 2 - 2 # slidly smaller than the tile
+            radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
         )
 
-        self.set_geometry( self.surface )
+        self.set_geometry( self.tile.get_surface() )

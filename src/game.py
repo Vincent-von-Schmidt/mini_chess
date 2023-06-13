@@ -14,7 +14,6 @@ class Game:
 
         # screen config
         self.screen = pygame.display.set_mode(
-            # (const.BOARD_RESOLUTION, const.BOARD_RESOLUTION + const.BOARD_RESOLUTION // 4) 
             const.WINDOW_RESOLUTION
         )
         pygame.display.set_caption("Mini Chess")
@@ -27,16 +26,34 @@ class Game:
 
         # init map
         self.map: map.Map = map.Map()
-        self.button_start: clickable.Button = clickable.Button(
+
+        # clickable objects
+        self.clickable_objects: list = []
+
+        self.clickable_objects.append( clickable.Button(
             text = "start",
             position = (0, const.BOARD_RESOLUTION[1]),
             on_click = lambda: print("clicked"),
             highlight = (89, 170, 186)
-        )
-        self.test_figure: clickable.Figure = clickable.Figure(
-            position = (100, 100),
-            color = (155, 155, 155)
-        )
+        ))
+
+        # init figures
+        self.clickable_objects.append( clickable.Figure(
+            color = const.PLAYER_COLOR_A,
+            tile = self.map.get_tile_by_id(1)
+        ))
+        self.clickable_objects.append( clickable.Figure(
+            color = const.PLAYER_COLOR_A,
+            tile = self.map.get_tile_by_id(2)
+        ))
+        self.clickable_objects.append( clickable.Figure(
+            color = const.PLAYER_COLOR_B,
+            tile = self.map.get_tile_by_id(6)
+        ))
+        self.clickable_objects.append( clickable.Figure(
+            color = const.PLAYER_COLOR_B,
+            tile = self.map.get_tile_by_id(7)
+        ))
 
         self.player1: input_handler.Player = input_handler.Player()
         self.player2: input_handler.Player = input_handler.Player()
@@ -59,14 +76,22 @@ class Game:
         for event in events:
 
             # if clicked on the close button -> break game loop
-            if event.type == pygame.QUIT:
-                self.running: bool = False
+            # if event.type == pygame.QUIT:
+            match event.type:
 
-            self.button_start.update(event)
+                case pygame.QUIT:
+                    self.running: bool = False
+
+                case pygame.MOUSEBUTTONUP:
+                    self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
+
+            for object in self.clickable_objects:
+                object.update(event)
 
         # close window on key e -> faster keyboard control
         if keys[pygame.K_e]:
             self.running: bool = False
+
 
     def update(self) -> None:
         """
@@ -104,9 +129,14 @@ class Game:
         # objects_board to draw on screen
 
         objects_board.append(self.map.get_map())
-        objects_board.append(self.test_figure.get_map())
+        for object in self.clickable_objects:
 
-        objects_window.append(self.button_start.get_map())
+            if isinstance( object, clickable.Button ):
+                objects_window.append( object.get_map() )
+            elif isinstance( object, clickable.Figure ):
+                objects_board.append( object.get_map() )
+
+        # objects_window.append(self.button_start.get_map())
 
         # display -----------------------------------------------
 

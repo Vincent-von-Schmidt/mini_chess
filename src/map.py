@@ -4,6 +4,17 @@ import const
 
 
 class Tile:
+
+    __number_instances: int = 0 
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        counts the created objects to use as id
+        """
+
+        cls.__number_instances += 1
+        return super().__new__(cls)
+
     def __init__(self, texture: tuple[int, ...] | str) -> None:
         """
         texture: tuple[int, ...] -> RBGA color code
@@ -12,6 +23,9 @@ class Tile:
 
         texture: str -> path to image file
         """
+
+        self.position: tuple[int, int] | None = None
+        self.id: int = self.__number_instances - 1 # indexing starts at 0
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
@@ -32,6 +46,18 @@ class Tile:
         # color code given -> fill tile with given color
         elif texture_type == tuple:
             self.surface.fill( texture )
+
+    def get_surface(self) -> pygame.surface.Surface:
+        return self.surface
+
+    def set_position(self, coordinates: tuple[int, int]) -> None:
+        self.position = coordinates
+
+    def get_position(self) -> tuple[int, int]:
+        return self.position
+
+    def get_id(self) -> int:
+        return self.id
 
 
 class Map:
@@ -89,10 +115,13 @@ class Map:
                 # drawing coordinates
                 x: int = sum( widths )
                 y: int = sum( heights )
+                destination: tuple[int, int] = ( x, y )
+
+                tile.set_position( destination )
 
                 self.surface.blit(
                     source = tile.surface,
-                    dest = ( x, y )
+                    dest = destination
                 )
 
                 widths.append( tile.surface.get_width() )
@@ -103,3 +132,37 @@ class Map:
 
     def get_map(self) -> list:
         return [(self.surface), (0, 0)]
+
+    def get_construct_matrix(self) -> list[list[Tile]]:
+        return self.construct_matrix
+
+    def get_tile_by_id(self, id: int) -> Tile:
+        """
+        returns the tile with the given id
+        """
+
+        for row in self.construct_matrix:
+            for tile in row:
+
+                if tile.get_id() == id:
+                    return tile
+
+        raise NotImplementedError( f"No tile with the id: {id} found." )
+
+    def get_tile_by_hover( self ) -> Tile:
+        """
+        return hoverd tile
+        """
+
+        mouse_position: tuple[int, int] = pygame.mouse.get_pos()
+
+        for row in self.construct_matrix:
+            for tile in row:
+
+                tile_coordinats: tuple[int, int] = tile.get_position()
+                tile_surface: pygame.surface.Surface = tile.get_surface()
+                
+                if ( mouse_position[0] >= tile_coordinats[0] and mouse_position[0] <= tile_coordinats[0] + tile_surface.get_width() # x
+                    and mouse_position[1] >= tile_coordinats[1] and mouse_position[1] <= tile_coordinats[1] + tile_surface.get_height()): # y
+
+                    return tile

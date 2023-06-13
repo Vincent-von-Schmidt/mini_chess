@@ -107,7 +107,7 @@ class Game:
             print("Ende")
             print(self.position.field)
             print(self.position.history)
-            exit()
+            pass
 
         
 

@@ -129,9 +129,8 @@ class Game:
 
         
 
-        # if type(position.next) == Player: position.next.handle_input(position)
-        # else: position.next.play_best_turn(position)
-        pass
+        if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position)
+        else: self.position.cur.play_best_turn(self.position)
 
     def render(self) -> None:
         """

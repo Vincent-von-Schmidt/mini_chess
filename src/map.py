@@ -1,6 +1,7 @@
 import pygame
 
 import const
+# from clickable import Figure
 
 
 class Tile:
@@ -26,6 +27,9 @@ class Tile:
 
         self.position: tuple[int, int] | None = None
         self.id: int = self.__number_instances - 1 # indexing starts at 0
+        self.highlight: bool = False
+        # self.figure: Figure | None = None
+        self.figure = None
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
@@ -66,6 +70,21 @@ class Tile:
 
     def set_position(self, coordinates: tuple[int, int]) -> None:
         self.position = coordinates
+
+    # def set_figure(self, figure: Figure) -> None:
+    def set_figure(self, figure) -> None:
+        self.figure = figure
+        print(f"{self.figure.color = }")
+
+    # def get_figure(self) -> Figure | None:
+    def get_figure(self):
+        return self.figure
+
+    # TODO
+    def set_highlight(self) -> None:
+
+        if self.highlight:
+            pass
 
     def get_position(self) -> tuple[int, int]:
         return self.position
@@ -163,15 +182,15 @@ class Map:
 
         raise NotImplementedError( f"No tile with the id: {id} found." )
 
-    def get_tile_by_hover( self ) -> Tile:
+    def get_tile_by_hover( self ) -> Tile | None:
         """
         return hoverd tile
         """
-
-        mouse_position: tuple[int, int] = pygame.mouse.get_pos()
 
         for row in self.construct_matrix:
             for tile in row:
 
                 if tile.is_hover():
                     return tile
+
+        return None

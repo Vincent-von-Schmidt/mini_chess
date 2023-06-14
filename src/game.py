@@ -54,6 +54,8 @@ class Game:
             tile = self.map.get_tile_by_id(7)
         ))
 
+        self.highlighted_figure: clickable.Figure | None = None
+
         self.tmp: bool = True
         self.player1: input_handler.Player = input_handler.Player()
         self.player2: input_handler.Player = input_handler.Player()
@@ -73,10 +75,13 @@ class Game:
         events: list = pygame.event.get()
         keys: pygame.key.ScanccodeWrapper = pygame.key.get_pressed()
 
+        print(f"{self.highlighted_figure = }")
+
         for event in events:
 
             # if clicked on the close button -> break game loop
             # if event.type == pygame.QUIT:
+
             match event.type:
 
                 case pygame.QUIT:
@@ -84,7 +89,16 @@ class Game:
 
                 case pygame.MOUSEBUTTONUP:
                     if event.button == 1: # left click
-                        self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
+
+                        tile: map.Tile | None = self.map.get_tile_by_hover()
+                        
+                        if self.highlighted_figure != None:
+                            self.highlighted_figure.set_tile( tile )
+                            self.highlighted_figure = None
+
+                        if tile != None and tile.get_figure() != None:
+                            print("got tile")
+                            self.highlighted_figure = tile.get_figure()
 
                     elif event.button == 3: # right click
                         self.clickable_objects[3].set_highlight()
@@ -101,17 +115,17 @@ class Game:
         """
         game logic
         """
-        turns = self.position.get_possible_turns()
-        print("Turns", turns)
-        if len(turns) > 0: 
-            self.position.set_turn(turns[0][0], turns[0][1])
-            print("########################## Player", self.position.turn, "####################################")
-            print(self.position.field)
-        else: 
-            print("Ende")
-            print(self.position.field)
-            print(self.position.history)
-            pass
+        # turns = self.position.get_possible_turns()
+        # print("Turns", turns)
+        # if len(turns) > 0: 
+        #     self.position.set_turn(turns[0][0], turns[0][1])
+        #     print("########################## Player", self.position.turn, "####################################")
+        #     print(self.position.field)
+        # else: 
+        #     print("Ende")
+        #     print(self.position.field)
+        #     print(self.position.history)
+        #     pass
 
         
 

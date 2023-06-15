@@ -49,8 +49,25 @@ class Tile:
         elif texture_type == tuple:
             self.surface.fill( texture )
 
+        self.inital_surface: pygame.surface.Surface = self.surface
+
+    def set_surface(self, surface: pygame.surface.Surface) -> None:
+        """
+        update the internal surface
+        """
+        self.surface = surface
+
     def get_surface(self) -> pygame.surface.Surface:
+        """
+        return the drawn image
+        """
         return self.surface
+
+    def get_initial_surface(self) -> pygame.surface.Surface:
+        """
+        return the initial surface without any outside changes
+        """
+        return self.inital_surface
 
     def is_hover(self) -> bool:
         """

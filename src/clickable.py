@@ -99,8 +99,7 @@ class Figure( Clickable_object ):
     def __init__(
         self,
         color: tuple[int, int, int],
-        # tile: Tile
-        tile
+        tile # tile: map.Tile
     ) -> None:
 
         self.color: tuple[int, int, int] = color
@@ -132,23 +131,27 @@ class Figure( Clickable_object ):
             position = (self.tile.get_position())
         )
 
+        surface: pygame.surface.Surface = self.tile.get_initial_surface()
+
         center: tuple[int, int] = (const.TILE_SIZE // 2, const.TILE_SIZE // 2)
         radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
 
         # draws a slidly biger circle around the figure
+        print(f"{self.highlight = }")
         if self.highlight:
             pygame.draw.circle(
-                surface = self.tile.get_surface(),
-                color = (0, 255, 255),
+                surface = surface,
+                color = (255, 255, 0),
                 center = center,
-                radius = radius - 5
+                radius = radius + 2
             )
 
         pygame.draw.circle(
-            surface = self.tile.get_surface(),
+            surface = surface,
             color = self.color,
             center = center,
             radius = radius
         )
 
-        self.set_geometry( self.tile.get_surface() )
+        self.tile.set_surface( surface )
+        self.set_geometry( surface )

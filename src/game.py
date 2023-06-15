@@ -108,8 +108,8 @@ class Game:
                                 self.highlighted_figure.set_tile( tile )
                                 print("moved")
 
-                                # remove highlight from figure
-                                self.highlighted_figure = None
+                            # remove highlight from figure
+                            self.highlighted_figure = None
 
                             # TODO
                             # save turn for evalution

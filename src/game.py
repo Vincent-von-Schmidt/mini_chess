@@ -54,13 +54,14 @@ class Game:
         self.highlighted_figure: clickable.Figure | None = None
 
         self.tmp: bool = True
-        # self.player1: input_handler.Player = input_handler.Player( const.WHITE )
-        # self.player2: input_handler.Player = input_handler.Player( const.BLACK )
-        # self.position: position.Position = position.Position(
-        #     self.player1,
-        #     self.player2,
-        #     cur = self.player1
-        # )
+        self.player1: input_handler.Player = input_handler.Player( const.WHITE )
+        self.player2: input_handler.Player = input_handler.Player( const.BLACK )
+        self.position: position.Position = position.Position(
+            self.player1,
+            self.player2,
+            cur = self.player1
+        )
+        self.turns = []
 
         self.last_turn: tuple[int, int] | None = None
 
@@ -129,6 +130,10 @@ class Game:
             else: self.position.cur.play_best_turn(self.position)
             self.last_turn = []
             self.turns = self.position.get_possible_turns()
+        if self.position.check_end():
+            self.running = False
+            print(self.position.field)
+            print(self.position.cur.color, "wins")
 
 
     def render(self) -> None:

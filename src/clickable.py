@@ -120,15 +120,19 @@ class Figure( Clickable_object ):
     ) -> None:
 
         self.color: tuple[int, int, int] = color
-        # self.tile: Tile = tile
+        self.tile = None
+        self.pre_tile = None
         self.set_tile( tile )
 
-    # def set_tile(self, tile: Tile) -> None:
     def set_tile(self, tile) -> None:
         print("update")
+        self.pre_tile = self.tile
         self.tile = tile
         self.tile.set_figure( self )
         self.render()
+
+    def get_turn(self) -> tuple[int, int]:
+        return (self.pre_tile.get_id(), self.tile.get_id())
 
     def render(self) -> None:
 

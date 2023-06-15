@@ -34,6 +34,8 @@ class Tile:
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
         )
+        self.highlighted_surface: pygame.surface.Surface = self.surface
+        self.highlighted: bool = False
 
         # texture type check and coloring of surface
 

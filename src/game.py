@@ -3,8 +3,8 @@ import pygame
 import map
 import clickable
 import const
-# import position
-# import input_handler
+import position
+import input_handler
 
 
 class Game:
@@ -57,13 +57,12 @@ class Game:
         self.highlighted_figure: clickable.Figure | None = None
 
         self.tmp: bool = True
-        # self.player1: input_handler.Player = input_handler.Player( const.PLAYER_COLOR_A )
-        # self.player2: input_handler.Player = input_handler.Player( const.PLAYER_COLOR_B )
+        # self.player1: input_handler.Player = input_handler.Player( const.WHITE )
+        # self.player2: input_handler.Player = input_handler.Player( const.BLACK )
         # self.position: position.Position = position.Position(
         #     self.player1,
         #     self.player2,
-        #     cur = self.player1,
-        #     field = [0, -1, -1, 0, 0, 0, 1, 1, 0]
+        #     cur = self.player1
         # )
 
     def input(self) -> None:
@@ -111,7 +110,6 @@ class Game:
         """
         game logic
         """
-        # turns = self.position.get_possible_turns()
         # print("Turns", turns)
         # if len(turns) > 0: 
         #     self.position.set_turn(turns[0][0], turns[0][1])
@@ -123,10 +121,12 @@ class Game:
         #     print(self.position.history)
         #     pass
 
-        
+        if self.last_turn in self.turns:
+            if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position, self.last_turn)
+            else: self.position.cur.play_best_turn(self.position)
+            self.last_turn = []
+            self.turns = self.position.get_possible_turns()
 
-        # if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position)
-        # else: self.position.cur.play_best_turn(self.position)
 
     def render(self) -> None:
         """

@@ -14,10 +14,10 @@ class Player(Input_Handler):
         super().__init__()
         self.color = color
     
-    def handle_input(self, position):
+    def handle_input(self, position, turn):
         # hier Schnittstelle zwischen clickable und game loop
-        turn = []
-        position.set_turn(turn[0], turn[1])
+        if len(turn) == 2:
+            position.set_turn(turn[0], turn[1])
 
 
 class AI(Input_Handler):

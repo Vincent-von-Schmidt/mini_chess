@@ -76,7 +76,6 @@ class Tile:
     # def set_figure(self, figure: Figure) -> None:
     def set_figure(self, figure) -> None:
         self.figure = figure
-        print(f"{self.figure.color = }")
 
     # def get_figure(self) -> Figure | None:
     def get_figure(self):

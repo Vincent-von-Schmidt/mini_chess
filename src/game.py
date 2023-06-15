@@ -86,14 +86,21 @@ class Game:
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
                         
+                        # if highlighted
                         if self.highlighted_figure != None:
-                            self.highlighted_figure.set_tile( tile )
 
+                            # evaluation
+                            if tile in self.turns:
+                                # move figure
+                                self.highlighted_figure.set_tile( tile )
+
+                                # remove highlight from figure
+                                self.highlighted_figure = None
+                                break # otherwise highlighted_figure will be set in next loop entry
+
+                            # TODO
                             # save turn for evalution
                             self.last_turn = self.highlighted_figure.get_turn()
-
-                            self.highlighted_figure = None
-                            break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
                             print("got tile")

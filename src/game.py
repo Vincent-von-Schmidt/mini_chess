@@ -31,7 +31,7 @@ class Game:
         self.clickable_objects: list = []
 
         self.clickable_objects.append( clickable.Button(
-            text = "start",
+            text = "resign",
             position = (0, const.BOARD_RESOLUTION[1]),
             on_click = lambda: print("clicked"),
         ))
@@ -122,9 +122,6 @@ class Game:
                             self.highlighted_figure = tile.get_figure()
                             self.highlighted_figure.set_highlight( True )
                             break
-
-                    elif event.button == 3: # right click
-                        self.clickable_objects[3].set_highlight()
 
             for object in self.clickable_objects:
                 object.update(event)

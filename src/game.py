@@ -37,19 +37,20 @@ class Game:
         ))
 
         # init figures
-        index_figures: int = 0
         for index, element in enumerate( const.FIELD_EMPTY ):
-            if element == 1: 
+            match element:
 
-                if index_figures <= 1: color: tuple[int, int, int] = const.PLAYER_COLOR_A
-                else: color: tuple[int, int, int] = const.PLAYER_COLOR_B
+                case 1:
+                    self.clickable_objects.append( clickable.Figure(
+                        color = const.PLAYER_COLOR_A,
+                        tile = self.map.get_tile_by_id( index )
+                    )) 
 
-                self.clickable_objects.append( clickable.Figure(
-                    color = color,
-                    tile = self.map.get_tile_by_id( index )
-                ))
-
-                index_figures += 1
+                case -1:
+                    self.clickable_objects.append( clickable.Figure(
+                        color = const.PLAYER_COLOR_B,
+                        tile = self.map.get_tile_by_id( index )
+                    )) 
 
         self.highlighted_figure: clickable.Figure | None = None
 
@@ -86,14 +87,27 @@ class Game:
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
                         
+                        # if highlighted
                         if self.highlighted_figure != None:
-                            self.highlighted_figure.set_tile( tile )
 
+                            # evaluation
+                            if tile in self.turns:
+                                
+                                # if figure on tile, kill it
+                                if tile.get_figure() != None:
+                                    tile.set_figure( None )
+                                    del tile.get_figure()
+
+                                # move figure
+                                self.highlighted_figure.set_tile( tile )
+
+                                # remove highlight from figure
+                                self.highlighted_figure = None
+                                break # otherwise highlighted_figure will be set in next loop entry
+
+                            # TODO
                             # save turn for evalution
                             self.last_turn = self.highlighted_figure.get_turn()
-
-                            self.highlighted_figure = None
-                            break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
                             print("got tile")

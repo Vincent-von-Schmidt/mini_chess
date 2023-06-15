@@ -125,9 +125,9 @@ class Figure( Clickable_object ):
         self.set_tile( tile )
 
     def set_tile(self, tile) -> None:
-        print("update")
         self.pre_tile = self.tile
         self.tile = tile
+        self.pre_tile.set_figure( None )
         self.tile.set_figure( self )
         self.render()
 

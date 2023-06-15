@@ -2,7 +2,7 @@ import pygame
 from typing import Callable
 
 import const
-import map
+from map import Tile
 
 
 class Clickable_object:
@@ -25,6 +25,7 @@ class Clickable_object:
         self.surface = surface
         self.non_highlighted_surface = self.surface
 
+    # TODO
     def set_highlight(self) -> None:
 
         if self.highlight:
@@ -114,15 +115,19 @@ class Figure( Clickable_object ):
     def __init__(
         self,
         color: tuple[int, int, int],
-        tile: map.Tile
+        # tile: Tile
+        tile
     ) -> None:
 
         self.color: tuple[int, int, int] = color
-        self.tile: map.Tile = tile
-        self.render()
+        # self.tile: Tile = tile
+        self.set_tile( tile )
 
-    def update_tile(self, tile: map.Tile) -> None:
+    # def set_tile(self, tile: Tile) -> None:
+    def set_tile(self, tile) -> None:
+        print("update")
         self.tile = tile
+        self.tile.set_figure( self )
         self.render()
 
     def render(self) -> None:

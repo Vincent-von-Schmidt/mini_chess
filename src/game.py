@@ -3,8 +3,8 @@ import pygame
 import map
 import clickable
 import const
-import position
-import input_handler
+# import position
+# import input_handler
 
 
 class Game:
@@ -54,15 +54,17 @@ class Game:
             tile = self.map.get_tile_by_id(7)
         ))
 
+        self.highlighted_figure: clickable.Figure | None = None
+
         self.tmp: bool = True
-        self.player1: input_handler.Player = input_handler.Player()
-        self.player2: input_handler.Player = input_handler.Player()
-        self.position: position.Position = position.Position(
-            self.player1,
-            self.player2,
-            cur = self.player1,
-            field = [0, -1, -1, 0, 0, 0, 1, 1, 0]
-        )
+        # self.player1: input_handler.Player = input_handler.Player( const.PLAYER_COLOR_A )
+        # self.player2: input_handler.Player = input_handler.Player( const.PLAYER_COLOR_B )
+        # self.position: position.Position = position.Position(
+        #     self.player1,
+        #     self.player2,
+        #     cur = self.player1,
+        #     field = [0, -1, -1, 0, 0, 0, 1, 1, 0]
+        # )
 
     def input(self) -> None:
         """
@@ -75,8 +77,6 @@ class Game:
 
         for event in events:
 
-            # if clicked on the close button -> break game loop
-            # if event.type == pygame.QUIT:
             match event.type:
 
                 case pygame.QUIT:
@@ -84,7 +84,17 @@ class Game:
 
                 case pygame.MOUSEBUTTONUP:
                     if event.button == 1: # left click
-                        self.clickable_objects[3].update_tile( self.map.get_tile_by_hover() )
+
+                        tile: map.Tile | None = self.map.get_tile_by_hover()
+                        
+                        if self.highlighted_figure != None:
+                            self.highlighted_figure.set_tile( tile )
+                            self.highlighted_figure = None
+                            break # otherwise highlighted_figure will be set in next loop entry
+
+                        if tile != None and tile.get_figure() != None:
+                            print("got tile")
+                            self.highlighted_figure = tile.get_figure()
 
                     elif event.button == 3: # right click
                         self.clickable_objects[3].set_highlight()
@@ -115,8 +125,8 @@ class Game:
 
         
 
-        if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position)
-        else: self.position.cur.play_best_turn(self.position)
+        # if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position)
+        # else: self.position.cur.play_best_turn(self.position)
 
     def render(self) -> None:
         """

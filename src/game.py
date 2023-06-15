@@ -37,22 +37,19 @@ class Game:
         ))
 
         # init figures
-        self.clickable_objects.append( clickable.Figure(
-            color = const.PLAYER_COLOR_A,
-            tile = self.map.get_tile_by_id(1)
-        ))
-        self.clickable_objects.append( clickable.Figure(
-            color = const.PLAYER_COLOR_A,
-            tile = self.map.get_tile_by_id(2)
-        ))
-        self.clickable_objects.append( clickable.Figure(
-            color = const.PLAYER_COLOR_B,
-            tile = self.map.get_tile_by_id(6)
-        ))
-        self.clickable_objects.append( clickable.Figure(
-            color = const.PLAYER_COLOR_B,
-            tile = self.map.get_tile_by_id(7)
-        ))
+        index_figures: int = 0
+        for index, element in enumerate( const.FIELD_EMPTY ):
+            if element == 1: 
+
+                if index_figures <= 1: color: tuple[int, int, int] = const.PLAYER_COLOR_A
+                else: color: tuple[int, int, int] = const.PLAYER_COLOR_B
+
+                self.clickable_objects.append( clickable.Figure(
+                    color = color,
+                    tile = self.map.get_tile_by_id( index )
+                ))
+
+                index_figures += 1
 
         self.highlighted_figure: clickable.Figure | None = None
 
@@ -64,6 +61,8 @@ class Game:
         #     self.player2,
         #     cur = self.player1
         # )
+
+        self.last_turn: tuple[int, int] | None = None
 
     def input(self) -> None:
         """
@@ -88,6 +87,10 @@ class Game:
                         
                         if self.highlighted_figure != None:
                             self.highlighted_figure.set_tile( tile )
+
+                            # save turn for evalution
+                            self.last_turn = self.highlighted_figure.get_turn()
+
                             self.highlighted_figure = None
                             break # otherwise highlighted_figure will be set in next loop entry
 

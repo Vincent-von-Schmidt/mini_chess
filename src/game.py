@@ -63,6 +63,8 @@ class Game:
         #     field = [0, -1, -1, 0, 0, 0, 1, 1, 0]
         # )
 
+        self.last_turn: tuple[int, int] | None = None
+
     def input(self) -> None:
         """
         key input + reaction
@@ -86,7 +88,10 @@ class Game:
                         
                         if self.highlighted_figure != None:
                             self.highlighted_figure.set_tile( tile )
-                            print( self.highlighted_figure.get_turn() )
+
+                            # save turn for evalution
+                            self.last_turn = self.highlighted_figure.get_turn()
+
                             self.highlighted_figure = None
                             break # otherwise highlighted_figure will be set in next loop entry
 

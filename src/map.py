@@ -1,4 +1,5 @@
 import pygame
+import copy
 
 import const
 # from clickable import Figure
@@ -49,7 +50,7 @@ class Tile:
         elif texture_type == tuple:
             self.surface.fill( texture )
 
-        self.inital_surface: pygame.surface.Surface = self.surface
+        self.inital_surface: pygame.surface.Surface = self.surface.copy()
 
     def set_surface(self, surface: pygame.surface.Surface) -> None:
         """

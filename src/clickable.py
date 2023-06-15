@@ -161,6 +161,7 @@ class Figure( Clickable_object ):
         set highlight and rerenders the surface to add visible yellow circle around figure
         """
         self.highlight = switch
+        print(1)
         self.render()
 
     def render(self) -> None:
@@ -173,6 +174,7 @@ class Figure( Clickable_object ):
         )
 
         surface: pygame.surface.Surface = self.tile.get_initial_surface()
+        print( f"same check: { surface == self.tile.get_surface() }" )
 
         center: tuple[int, int] = (const.TILE_SIZE // 2, const.TILE_SIZE // 2)
         radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
@@ -180,6 +182,7 @@ class Figure( Clickable_object ):
         # draws a slidly biger circle around the figure
         print(f"{self.highlight = }")
         if self.highlight:
+            print(2)
             pygame.draw.circle(
                 surface = surface,
                 color = (255, 255, 0),

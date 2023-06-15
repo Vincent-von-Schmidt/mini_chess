@@ -37,19 +37,20 @@ class Game:
         ))
 
         # init figures
-        index_figures: int = 0
         for index, element in enumerate( const.FIELD_EMPTY ):
-            if element == 1: 
+            match element:
 
-                if index_figures <= 1: color: tuple[int, int, int] = const.PLAYER_COLOR_A
-                else: color: tuple[int, int, int] = const.PLAYER_COLOR_B
+                case 1:
+                    self.clickable_objects.append( clickable.Figure(
+                        color = const.PLAYER_COLOR_A,
+                        tile = self.map.get_tile_by_id( index )
+                    )) 
 
-                self.clickable_objects.append( clickable.Figure(
-                    color = color,
-                    tile = self.map.get_tile_by_id( index )
-                ))
-
-                index_figures += 1
+                case -1:
+                    self.clickable_objects.append( clickable.Figure(
+                        color = const.PLAYER_COLOR_B,
+                        tile = self.map.get_tile_by_id( index )
+                    )) 
 
         self.highlighted_figure: clickable.Figure | None = None
 
@@ -91,6 +92,12 @@ class Game:
 
                             # evaluation
                             if tile in self.turns:
+                                
+                                # if figure on tile, kill it
+                                if tile.get_figure() != None:
+                                    tile.set_figure( None )
+                                    del tile.get_figure()
+
                                 # move figure
                                 self.highlighted_figure.set_tile( tile )
 

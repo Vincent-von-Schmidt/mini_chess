@@ -127,6 +127,7 @@ class Figure( Clickable_object ):
     def set_tile(self, tile) -> None:
         self.pre_tile = self.tile
         self.tile = tile
+        self.pre_tile.set_figure( None )
         self.tile.set_figure( self )
         self.render()
 

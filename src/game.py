@@ -157,7 +157,7 @@ class Game:
         if self.position.check_end():
             self.running = False
             print(self.position.field)
-            print(self.position.cur.color, "wins")
+            print(self.position.cur.color, "lose")
 
 
     def render(self) -> None:

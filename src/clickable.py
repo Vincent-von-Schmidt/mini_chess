@@ -132,8 +132,8 @@ class Figure( Clickable_object ):
         self.tile.set_figure( self )
         self.render()
 
-    def get_turn(self) -> tuple[int, int]:
-        return (self.pre_tile.get_id(), self.tile.get_id())
+    def get_tile(self):
+        return self.tile
 
     def render(self) -> None:
 

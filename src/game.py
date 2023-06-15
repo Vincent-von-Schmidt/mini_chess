@@ -90,10 +90,13 @@ class Game:
                         # if highlighted
                         if self.highlighted_figure != None:
 
-                            print(self.turns)
+                            print(f"{self.turns = }")
+
+                            turn: list[int, int] = [self.highlighted_figure.get_tile().get_id(), tile.get_id()]
+                            print(f"{turn = }")
 
                             # evaluation
-                            if tile in self.turns:
+                            if turn in self.turns:
                                 
                                 # if figure on tile, kill it
                                 if tile.get_figure() != None:
@@ -107,11 +110,12 @@ class Game:
 
                                 # remove highlight from figure
                                 self.highlighted_figure = None
-                                break # otherwise highlighted_figure will be set in next loop entry
 
                             # TODO
                             # save turn for evalution
-                            self.last_turn = self.highlighted_figure.get_turn()
+                            self.last_turn = turn
+                            print(f"{self.last_turn = }")
+                            break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
                             print("got tile")

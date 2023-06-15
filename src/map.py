@@ -27,15 +27,11 @@ class Tile:
 
         self.position: tuple[int, int] | None = None
         self.id: int = self.__number_instances - 1 # indexing starts at 0
-        self.highlight: bool = False
-        # self.figure: Figure | None = None
         self.figure = None
 
         self.surface: pygame.surface.Surface = pygame.surface.Surface(
             (const.TILE_SIZE, const.TILE_SIZE) 
         )
-        self.highlighted_surface: pygame.surface.Surface = self.surface
-        self.highlighted: bool = False
 
         # texture type check and coloring of surface
 
@@ -73,21 +69,13 @@ class Tile:
     def set_position(self, coordinates: tuple[int, int]) -> None:
         self.position = coordinates
 
-    # def set_figure(self, figure: Figure) -> None:
     def set_figure(self, figure) -> None:
         self.figure = figure
 
-    # def get_figure(self) -> Figure | None:
     def get_figure(self):
         return self.figure
 
-    # TODO
-    def set_highlight(self) -> None:
-
-        if self.highlight:
-            pass
-
-    def get_position(self) -> tuple[int, int]:
+    def get_position(self) -> tuple[int, int] | None:
         return self.position
 
     def get_id(self) -> int:

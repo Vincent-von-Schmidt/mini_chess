@@ -14,9 +14,7 @@ class Clickable_object:
 
         self.position: tuple[int, int] = position
         self.on_click: Callable | None = on_click
-        self.highlight: bool = False
         self.surface: pygame.surface.Surface | None = None
-        self.non_highlighted_surface: pygame.surface.Surface | None = None
 
     def set_clicked(self, on_click: Callable) -> None:
         self.on_click = on_click
@@ -24,20 +22,6 @@ class Clickable_object:
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         self.surface = surface
         self.non_highlighted_surface = self.surface
-
-    # TODO
-    def set_highlight(self) -> None:
-
-        if self.highlight:
-
-            self.non_highlighted_surface = self.surface
-            self.surface.fill( (255, 255, 0) )
-            self.highlight = False
-
-        else:
-
-            self.surface = self.non_highlighted_surface
-            self.highlight = True
 
     def get_map(self) -> list:
         return [self.surface, self.position]
@@ -123,6 +107,9 @@ class Figure( Clickable_object ):
         self.pre_tile = tile
         self.tile = tile
         self.tile.set_figure( self )
+
+        self.highlight: bool = False
+
         self.render()
 
     def set_tile(self, tile) -> None:
@@ -135,17 +122,33 @@ class Figure( Clickable_object ):
     def get_tile(self):
         return self.tile
 
+    def set_highlight(self, switch: bool) -> None:
+        self.highlight = switch
+        self.render()
+
     def render(self) -> None:
 
         super().__init__(
             position = (self.tile.get_position())
         )
 
+        center: tuple[int, int] = (const.TILE_SIZE // 2, const.TILE_SIZE // 2)
+        radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
+
+        # draws a slidly biger circle around the figure
+        if self.highlight:
+            pygame.draw.circle(
+                surface = self.tile.get_surface(),
+                color = (0, 255, 255),
+                center = center,
+                radius = radius - 5
+            )
+
         pygame.draw.circle(
             surface = self.tile.get_surface(),
             color = self.color,
-            center = (const.TILE_SIZE // 2, const.TILE_SIZE // 2),
-            radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
+            center = center,
+            radius = radius
         )
 
         self.set_geometry( self.tile.get_surface() )

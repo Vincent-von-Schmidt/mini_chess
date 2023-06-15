@@ -42,13 +42,13 @@ class Game:
 
                 case 1:
                     self.clickable_objects.append( clickable.Figure(
-                        color = const.PLAYER_COLOR_A,
+                        color = const.PLAYER_COLOR_B,
                         tile = self.map.get_tile_by_id( index )
                     )) 
 
                 case -1:
                     self.clickable_objects.append( clickable.Figure(
-                        color = const.PLAYER_COLOR_B,
+                        color = const.PLAYER_COLOR_A,
                         tile = self.map.get_tile_by_id( index )
                     )) 
 
@@ -109,6 +109,7 @@ class Game:
                                 print("moved")
 
                             # remove highlight from figure
+                            self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
                             # TODO
@@ -120,6 +121,7 @@ class Game:
                         if tile != None and tile.get_figure() != None:
                             print("got tile")
                             self.highlighted_figure = tile.get_figure()
+                            self.highlighted_figure.set_highlight( True )
                             break
 
                     elif event.button == 3: # right click

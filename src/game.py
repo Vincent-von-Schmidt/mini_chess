@@ -155,10 +155,11 @@ class Game:
             else: self.position.cur.play_best_turn(self.position)
             self.last_turn = []
             self.turns = self.position.get_possible_turns()
+            print(self.position.field)
         if self.position.check_end():
             self.running = False
             print(self.position.field)
-            print(self.position.cur.color, "wins")
+            print(self.position.cur.color, "lose")
 
 
     def render(self) -> None:

@@ -70,13 +70,13 @@ class Position:
         return turns
     
     def check_end(self) -> bool:
-        if self.cur == self.player[0]: pl = 1
+        if self.cur == self.player[1]: pl = 1
         else: pl = -1
-        for i in self.field:
+        for i in range(len(self.field)):
             if self.field[i] == 0: continue
             if (self.field[i]//abs(self.field[i])) == pl:
                 if pl == 1 and i//const.RATIO[0] == 0:
                     return True
-                elif pl == -1 and i//const.RATIO[0] == 2:
+                if pl == -1 and i//const.RATIO[0] == 2:
                     return True
         return False

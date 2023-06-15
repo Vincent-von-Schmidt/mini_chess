@@ -113,23 +113,20 @@ class Map:
         build the construct_matrix
         """
 
-        chess_board_pattern_switch: bool = True
 
-        for _ in range( const.RATIO[0] ): # row
+        for y in range( const.RATIO[0] ): # row
             
             # one list per row
             self.construct_matrix.append( row := [] )
 
-            for _ in range( const.RATIO[1] ): # column
+            for x in range( const.RATIO[1] ): # column
 
                 # black tile
-                if chess_board_pattern_switch:
-                    chess_board_pattern_switch: bool = False
+                if y%2 + x%2 == 1:
                     row.append( Tile(const.BOARD_COLOR_A) )
 
                 # white tile
                 else:
-                    chess_board_pattern_switch: bool = True
                     row.append( Tile(const.BOARD_COLOR_B) )
 
     def render(self) -> None:

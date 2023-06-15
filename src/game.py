@@ -62,7 +62,7 @@ class Game:
             self.player2,
             cur = self.player1
         )
-        self.turns = []
+        self.turns = self.position.get_possible_turns()
 
         self.last_turn: tuple[int, int] | None = None
 
@@ -90,16 +90,20 @@ class Game:
                         # if highlighted
                         if self.highlighted_figure != None:
 
+                            print(self.turns)
+
                             # evaluation
                             if tile in self.turns:
                                 
                                 # if figure on tile, kill it
                                 if tile.get_figure() != None:
                                     tile.set_figure( None )
-                                    del tile.get_figure()
+                                    figure = tile.get_figure()
+                                    del figure
 
                                 # move figure
                                 self.highlighted_figure.set_tile( tile )
+                                print("moved")
 
                                 # remove highlight from figure
                                 self.highlighted_figure = None
@@ -112,6 +116,7 @@ class Game:
                         if tile != None and tile.get_figure() != None:
                             print("got tile")
                             self.highlighted_figure = tile.get_figure()
+                            break
 
                     elif event.button == 3: # right click
                         self.clickable_objects[3].set_highlight()

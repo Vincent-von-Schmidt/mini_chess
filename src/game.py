@@ -112,7 +112,6 @@ class Game:
                             self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
-                            # TODO
                             # save turn for evalution
                             self.last_turn = turn
                             print(f"{self.last_turn = }")

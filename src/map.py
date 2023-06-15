@@ -111,11 +111,11 @@ class Map:
 
                 # black tile
                 if y%2 + x%2 == 1:
-                    row.append( Tile(const.BOARD_COLOR_A) )
+                    row.append( Tile(const.BOARD_COLOR_B) )
 
                 # white tile
                 else:
-                    row.append( Tile(const.BOARD_COLOR_B) )
+                    row.append( Tile(const.BOARD_COLOR_A) )
 
     def render(self) -> None:
         """

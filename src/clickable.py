@@ -1,5 +1,5 @@
 import pygame
-from typing import Callable
+from typing import Callable, Any
 
 import const
 # from map import Tile
@@ -17,6 +17,7 @@ class Clickable_object:
 
         self.position: tuple[int, int] = position
         self.on_click: Callable | None = on_click
+        self.on_click_return: Any | None = None
         self.surface: pygame.surface.Surface | None = None
 
     def set_clicked(self, on_click: Callable) -> None:
@@ -24,6 +25,9 @@ class Clickable_object:
         set function to execute on click
         """
         self.on_click = on_click
+
+    def get_function_return(self) -> Any:
+        return self.on_click_return
 
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         """
@@ -64,7 +68,7 @@ class Clickable_object:
             if event.type == pygame.MOUSEBUTTONUP:
 
                 if self.on_click != None:
-                    self.on_click()
+                    self.on_click_return = self.on_click()
 
         # reset hover color to none
         else: self.surface.set_alpha(255)
@@ -139,6 +143,12 @@ class Figure( Clickable_object ):
         self.highlight: bool = False
 
         self.render()
+
+    def __del__(self) -> None:
+        """
+        destructor
+        """
+        self.tile.set_surface( self.tile.get_initial_surface() )
 
     def set_tile(self, tile) -> None:
         """

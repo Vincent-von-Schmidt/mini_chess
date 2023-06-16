@@ -155,7 +155,10 @@ class Game:
         if self.position.check_end():
             self.running = False
             print(self.position.field)
-            print(self.position.cur.color, "lose")
+            print(self.position.player[self.position.player.index(self.position.cur)-1].color, "wins")
+        if len(self.turns) == 0 and self.position.turn != 0:
+            self.running = False
+            print("Remis")
 
 
     def render(self) -> None:

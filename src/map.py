@@ -1,5 +1,4 @@
 import pygame
-import copy
 
 import const
 # from clickable import Figure

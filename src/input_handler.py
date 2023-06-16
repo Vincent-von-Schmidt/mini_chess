@@ -1,4 +1,6 @@
 import pygame
+from typing import Any
+from dataclasses import dataclass
 
 
 class Input_Handler:
@@ -20,6 +22,15 @@ class Player(Input_Handler):
             position.set_turn(turn[0], turn[1])
 
 
+@dataclass
+class Node:
+    turn: list[int, int]
+    rating: int
+    alpha: int
+    beta: int
+    pointer: list
+
+
 class AI(Input_Handler):
     def __init__(self, color) -> None:
         super().__init__()
@@ -34,3 +45,50 @@ class AI(Input_Handler):
 
     def build_tree(self, position):
         pass
+
+    def build(self, tree: Node, position):
+        
+        turns: list[list[int]] = position.get_possible_turns()
+
+        if turns == []: # draw
+            return Node(
+                turn = [],
+                rating = 0,
+                alpha = -999,
+                beta = 999,
+                pointer = []
+            )
+
+        elif position.check_end():
+
+            if position.cur == self: # win
+                return Node(
+                    turn = [],
+                    rating = 1,
+                    alpha = -999,
+                    beta = 999,
+                    pointer = []
+                )
+
+            else: # lose
+                return Node(
+                    turn = [],
+                    rating = -1,
+                    alpha = -999,
+                    beta = 999,
+                    pointer = []
+                )
+
+        else:
+            
+            for turn in turns:
+                
+                pointer = []
+
+                tree.pointer.append( Node(
+                    turn = turn,
+                    rating = 0,
+                    alpha = -999,
+                    beta = 999,
+                    pointer = []
+                ))

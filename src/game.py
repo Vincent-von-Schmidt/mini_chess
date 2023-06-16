@@ -135,16 +135,6 @@ class Game:
         """
         game logic
         """
-        # print("Turns", turns)
-        # if len(turns) > 0: 
-        #     self.position.set_turn(turns[0][0], turns[0][1])
-        #     print("########################## Player", self.position.turn, "####################################")
-        #     print(self.position.field)
-        # else: 
-        #     print("Ende")
-        #     print(self.position.field)
-        #     print(self.position.history)
-        #     pass
 
         if self.last_turn in self.turns:
             if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position, self.last_turn)
@@ -222,6 +212,23 @@ class Game:
         """
         game loop
         """
+
+        PvP = clickable.Button(
+            text = "PvP",
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = 0,
+        )
+        PvE = clickable.Button(
+            text = "PvE",
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = 1,
+        )
+        while True:
+            events: list = pygame.event.get()
+            for event in events:
+                PvP.update(event)
+                PvE.update(event)
+            if PvP.
 
         while self.running:
 

@@ -1,4 +1,5 @@
 import pygame
+import copy
 
 import map
 import clickable
@@ -213,22 +214,37 @@ class Game:
         game loop
         """
 
-        PvP = clickable.Button(
+        tmp_clickable = copy.copy(self.clickable_objects)
+        self.clickable_objects = []
+        self.clickable_objects.append(clickable.Button(
             text = "PvP",
-            position = (0, const.BOARD_RESOLUTION[1]),
-            on_click = 0,
-        )
-        PvE = clickable.Button(
+            position = (0, 140),
+            on_click = clickable.button_push,
+        ))
+        self.clickable_objects.append(clickable.Button(
             text = "PvE",
-            position = (0, const.BOARD_RESOLUTION[1]),
-            on_click = 1,
-        )
+            position = (0, 140*2),
+            on_click = clickable.button_push,
+        ))
         while True:
-            events: list = pygame.event.get()
-            for event in events:
-                PvP.update(event)
-                PvE.update(event)
-            if PvP.
+            # events: list = pygame.event.get()
+            # for event in events:
+            #     self.clickable_objects[0].update(event)
+            #     self.clickable_objects[1].update(event)
+            self.input()
+            if self.clickable_objects[0].get_function_return():
+                self.clickable_objects = copy.copy(tmp_clickable)
+                print("gegenSpieler")
+                break
+            if self.clickable_objects[1].get_function_return():
+                self.player2 = input_handler.AI(const.BLACK)
+                self.position.player[1] = self.player2
+                self.clickable_objects = copy.copy(tmp_clickable)
+                print("gegenAI")
+                break
+            
+            self.render()
+            self.wait()
 
         while self.running:
 

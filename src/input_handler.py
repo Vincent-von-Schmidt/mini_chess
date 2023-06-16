@@ -24,7 +24,7 @@ class Player(Input_Handler):
 
 @dataclass
 class Node:
-    turn: list[int, int]
+    turn: list[int]
     rating: int
     alpha: int
     beta: int
@@ -35,7 +35,13 @@ class AI(Input_Handler):
     def __init__(self, color) -> None:
         super().__init__()
         self.color = color
-        self.root = None
+        self.root = Node(
+            turn = [0, 0],
+            rating = 0,
+            alpha = -999,
+            beta = 999,
+            pointer = []
+        )
     
     def play_best_turn(self, position):
         pass
@@ -44,7 +50,7 @@ class AI(Input_Handler):
         pass
 
     def build_tree(self, position):
-        pass
+        return self.build( self.root, position )
 
     def build(self, tree: Node, position):
         
@@ -83,12 +89,17 @@ class AI(Input_Handler):
             
             for turn in turns:
                 
-                pointer = []
+                node: Node = self.build(
+                    tree = Node(
+                        turn = turn,
+                        rating = 0,
+                        alpha = -999,
+                        beta = 999,
+                        pointer =[]
+                    ),
+                    position = position
+                )
 
-                tree.pointer.append( Node(
-                    turn = turn,
-                    rating = 0,
-                    alpha = -999,
-                    beta = 999,
-                    pointer = []
-                ))
+                tree.pointer.append( node )
+
+            return tree

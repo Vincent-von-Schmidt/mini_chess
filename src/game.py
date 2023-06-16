@@ -1,4 +1,5 @@
 import pygame
+import copy
 
 import map
 import clickable
@@ -135,16 +136,6 @@ class Game:
         """
         game logic
         """
-        # print("Turns", turns)
-        # if len(turns) > 0: 
-        #     self.position.set_turn(turns[0][0], turns[0][1])
-        #     print("########################## Player", self.position.turn, "####################################")
-        #     print(self.position.field)
-        # else: 
-        #     print("Ende")
-        #     print(self.position.field)
-        #     print(self.position.history)
-        #     pass
 
         if self.last_turn in self.turns:
             if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position, self.last_turn)
@@ -222,6 +213,38 @@ class Game:
         """
         game loop
         """
+
+        tmp_clickable = copy.copy(self.clickable_objects)
+        self.clickable_objects = []
+        self.clickable_objects.append(clickable.Button(
+            text = "PvP",
+            position = (0, 140),
+            on_click = clickable.button_push,
+        ))
+        self.clickable_objects.append(clickable.Button(
+            text = "PvE",
+            position = (0, 140*2),
+            on_click = clickable.button_push,
+        ))
+        while True:
+            # events: list = pygame.event.get()
+            # for event in events:
+            #     self.clickable_objects[0].update(event)
+            #     self.clickable_objects[1].update(event)
+            self.input()
+            if self.clickable_objects[0].get_function_return():
+                self.clickable_objects = copy.copy(tmp_clickable)
+                print("gegenSpieler")
+                break
+            if self.clickable_objects[1].get_function_return():
+                self.player2 = input_handler.AI(const.BLACK)
+                self.position.player[1] = self.player2
+                self.clickable_objects = copy.copy(tmp_clickable)
+                print("gegenAI")
+                break
+            
+            self.render()
+            self.wait()
 
         while self.running:
 

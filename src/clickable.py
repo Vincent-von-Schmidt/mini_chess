@@ -211,3 +211,6 @@ class Figure( Clickable_object ):
         # updates the surface to draw on map
         self.tile.set_surface( surface )
         self.set_geometry( surface )
+
+def button_push():
+    return True

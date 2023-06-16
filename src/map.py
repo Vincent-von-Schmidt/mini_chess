@@ -68,7 +68,7 @@ class Tile:
         """
         return the initial surface without any outside changes
         """
-        return self.inital_surface
+        return self.inital_surface.copy()
 
     def is_hover(self) -> bool:
         """

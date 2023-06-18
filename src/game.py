@@ -57,12 +57,15 @@ class Game:
 
         self.tmp: bool = True
         self.player1: input_handler.Player = input_handler.Player( const.WHITE )
-        self.player2: input_handler.Player = input_handler.Player( const.BLACK )
+        # self.player2: input_handler.Player = input_handler.Player( const.BLACK )
+        self.ai: input_handler.AI = input_handler.AI( const.BLACK )
         self.position: position.Position = position.Position(
             self.player1,
-            self.player2,
+            self.ai,
             cur = self.player1
         )
+        self.ai.set_position( self.position )
+        self.ai.build_tree( self.position )
         self.turns = self.position.get_possible_turns()
 
         self.last_turn: tuple[int, int] | None = None

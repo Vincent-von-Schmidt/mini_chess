@@ -150,11 +150,11 @@ class Game:
             self.last_turn = []
             self.turns = self.position.get_possible_turns()
             print(self.position.field)
-        if self.position.check_end():
+        if self.position.check_end():   #wenn der jetzige Spieler verloren hat, hat der vorherige gewonnen
             self.running = False
             print(self.position.field)
             print(self.position.player[self.position.player.index(self.position.cur)-1].color, "wins")
-        if len(self.turns) == 0 and self.position.turn != 0 and self.running:
+        if len(self.turns) == 0 and self.position.turn != 0 and self.running:    #wenn keine Züge mehr möglich sind, ist ein Unentschieden
             self.running = False
             print("Remis")
 
@@ -222,7 +222,7 @@ class Game:
         """
 
         self.running = False
-        tmp_clickable = copy.copy(self.clickable_objects)
+        tmp_clickable = copy.copy(self.clickable_objects)   #die Objecte des Spielfeldes werden temporär gesichert
         self.clickable_objects = []
         self.clickable_objects.append(clickable.Button(
             text = "PvP",

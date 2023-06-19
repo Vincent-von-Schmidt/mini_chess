@@ -74,20 +74,20 @@ class Position:
     
     def check_end(self) -> bool:
         """
-        return True if the current player has won
+        return True if the current player has lost
         """
         if self.cur == self.player[1]: pl = 1
         else: pl = -1
         n = 0
         for i in range(len(self.field)):
             if self.field[i] == 0: continue
-            if (self.field[i]//abs(self.field[i])) == pl:
+            if (self.field[i]//abs(self.field[i])) == pl:    #wenn die Figur dem Gegner gehört und auf der eigenen Linie ist, hat der Spieler verloren
                 if pl == 1 and i//const.RATIO[0] == 0:
                     return True
                 if pl == -1 and i//const.RATIO[0] == 2:
                     return True
             else:
                 n += 1
-        if n == 0:
+        if n == 0:    #wenn der Spieler keine Figuren hat, hat er verloren
             return True
         return False

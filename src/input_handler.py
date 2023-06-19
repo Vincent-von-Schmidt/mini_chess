@@ -52,7 +52,7 @@ class AI(Input_Handler):
     def build_tree(self, position):
         return self.build( self.root, position )
 
-    def build(self, tree: Node, position):
+    def build(self, tree: Node, position, min_max_switch: int):
         
         turns: list[list[int]] = position.get_possible_turns()
 

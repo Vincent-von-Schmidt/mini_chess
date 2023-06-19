@@ -1,5 +1,6 @@
 import pygame
 import copy
+import time
 
 import map
 import clickable
@@ -131,13 +132,14 @@ class Game:
                                 self.highlighted_figure.set_tile( tile )
                                 print("moved")
 
+                                # save turn for evalution
+                                self.last_turn = turn
+                                print(f"{self.last_turn = }")
+
                             # remove highlight from figure
                             self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
-                            # save turn for evalution
-                            self.last_turn = turn
-                            print(f"{self.last_turn = }")
                             break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
@@ -159,17 +161,24 @@ class Game:
         game logic
         """
 
-        if self.last_turn in self.turns:
-            if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position, self.last_turn)
-            else: self.position.cur.play_best_turn(self.position)
-            self.last_turn = []
+        if type(self.position.cur) == input_handler.Player: 
+            if self.last_turn != None:
+                self.position.cur.handle_input(self.position, self.last_turn)
+                self.last_turn = None
+                self.turns = self.position.get_possible_turns()
+                print(self.position.field)
+        else:
+            self.position.cur.play_best_turn(self.position)
+            time.sleep(0.1)   #ist das troll?
             self.turns = self.position.get_possible_turns()
             print(self.position.field)
+
         if self.position.check_end():   #wenn der jetzige Spieler verloren hat, hat der vorherige gewonnen
             self.running = False
             self.end = self.position.player[self.position.player.index(self.position.cur)-1].color + " wins"
             print(self.position.field)
             print(self.end)
+
         if len(self.turns) == 0 and self.running:    #wenn keine Züge mehr möglich sind, ist ein Unentschieden
             self.running = False
             self.end = "Remis"

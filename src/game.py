@@ -81,7 +81,12 @@ class Game:
             match event.type:
 
                 case pygame.QUIT:
-                    self.running: bool = False
+                    if self.running == False: 
+                        pygame.font.quit()
+                        pygame.quit()
+                        exit()
+
+                    else: self.running: bool = False
 
                 case pygame.MOUSEBUTTONUP:
                     if self.running == False: pass

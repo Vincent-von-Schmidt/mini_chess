@@ -72,6 +72,7 @@ class Position:
     def check_end(self) -> bool:
         if self.cur == self.player[1]: pl = 1
         else: pl = -1
+        n = 0
         for i in range(len(self.field)):
             if self.field[i] == 0: continue
             if (self.field[i]//abs(self.field[i])) == pl:
@@ -79,4 +80,8 @@ class Position:
                     return True
                 if pl == -1 and i//const.RATIO[0] == 2:
                     return True
+            else:
+                n += 1
+        if n == 0:
+            return True
         return False

@@ -120,11 +120,11 @@ class AI:
                 pointer.append( node )
                 print(f"{node = }")
 
+            rating_list: list[int] = []
+
             match min_max_switch:
 
                 case 1: # max
-
-                    rating_list: list[int] = []
 
                     for child in pointer:
                         rating: int = child.rating
@@ -135,8 +135,6 @@ class AI:
                     if rating > alpha: alpha = rating
 
                 case -1: # min
-
-                    rating_list: list[int] = []
 
                     for child in pointer:
                         rating: int = child.rating

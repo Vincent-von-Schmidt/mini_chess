@@ -50,4 +50,3 @@ for y in range(MATRIX_RAT):
         else:
             KNIGHT_MOV.append(1)
             KNIGHT_ATK.append(0)
-

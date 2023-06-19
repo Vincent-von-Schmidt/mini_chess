@@ -106,12 +106,12 @@ class Button( Clickable_object ):
         self.surface.fill( (81, 145, 158) )
 
         self.surface.blit(
-                source = self.text,
-                dest = (
-                    self.surface.get_width() // 2 - self.text.get_width() // 2,
-                    self.surface.get_height() // 2 - self.text.get_height() // 2
-                    )
-                )
+            source = self.text,
+            dest = (
+                self.surface.get_width() // 2 - self.text.get_width() // 2,
+                self.surface.get_height() // 2 - self.text.get_height() // 2
+            )
+        )
 
         self.set_geometry( self.surface )
 
@@ -184,15 +184,12 @@ class Figure( Clickable_object ):
         )
 
         surface: pygame.surface.Surface = self.tile.get_initial_surface()
-        print( f"same check: { surface == self.tile.get_surface() }" )
 
         center: tuple[int, int] = (const.TILE_SIZE // 2, const.TILE_SIZE // 2)
         radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile
 
         # draws a slidly biger circle around the figure
-        print(f"{self.highlight = }")
         if self.highlight:
-            print(2)
             pygame.draw.circle(
                 surface = surface,
                 color = (255, 255, 0),

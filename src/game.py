@@ -235,10 +235,6 @@ class Game:
             on_click = clickable.button_push,
         ))
         while True:
-            # events: list = pygame.event.get()
-            # for event in events:
-            #     self.clickable_objects[0].update(event)
-            #     self.clickable_objects[1].update(event)
             self.input()
             if self.clickable_objects[0].get_function_return():
                 self.clickable_objects = copy.copy(tmp_clickable)

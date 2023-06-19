@@ -1,6 +1,7 @@
 import pygame
 from typing import Callable, Any
 
+import main
 import const
 # from map import Tile
 

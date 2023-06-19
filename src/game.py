@@ -24,6 +24,7 @@ class Game:
 
         # stops game loop if necesary
         self.running: bool = True
+        self.mode_select: bool = True
 
         # init map
         self.map: map.Map = map.Map()
@@ -34,7 +35,7 @@ class Game:
         self.clickable_objects.append( clickable.Button(
             text = "resign",
             position = (0, const.BOARD_RESOLUTION[1]),
-            on_click = lambda: print("clicked"),
+            on_click = self.button_resign,
         ))
 
         # init figures
@@ -68,6 +69,20 @@ class Game:
         self.last_turn: tuple[int, int] | None = None
 
         self.end: str = ''
+    
+    def button_resign(self):
+        self.running = False
+        self.end = self.position.player[self.position.player.index(self.position.cur)-1].color + " wins"
+
+    def button_pvp(self):
+        self.mode_select = False
+        print("gegenSpieler")
+
+    def button_pve(self):
+        self.player2 = input_handler.AI(const.BLACK)
+        self.position.player[1] = self.player2
+        self.mode_select = False
+        print("gegenAI")
 
     def input(self) -> None:
         """
@@ -83,16 +98,13 @@ class Game:
             match event.type:
 
                 case pygame.QUIT:
-                    print(event)
-                    if self.running == False: 
-                        pygame.font.quit()
-                        pygame.quit()
-                        exit()
+                    pygame.font.quit()
+                    pygame.quit()
+                    exit()
 
-                    else: self.running: bool = False
 
                 case pygame.MOUSEBUTTONUP:
-                    if self.running == False: pass
+                    if self.mode_select: pass
                     elif event.button == 1: # left click
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
@@ -226,35 +238,23 @@ class Game:
         """
         mode select
         """
-        self.running = False
         tmp_clickable = copy.copy(self.clickable_objects)   #die Objecte des Spielfeldes werden temporär gesichert
         self.clickable_objects = []
         self.clickable_objects.append(clickable.Button(
             text = "PvP",
             position = (0, 140),
-            on_click = clickable.button_push,
+            on_click = self.button_pvp,
         ))
         self.clickable_objects.append(clickable.Button(
             text = "PvE",
             position = (0, 140*2),
-            on_click = clickable.button_push,
+            on_click = self.button_pve,
         ))
-        while True:
-            self.input()
-            if self.clickable_objects[0].get_function_return():
-                self.clickable_objects = copy.copy(tmp_clickable)
-                print("gegenSpieler")
-                break
-            if self.clickable_objects[1].get_function_return():
-                self.player2 = input_handler.AI(const.BLACK)
-                self.position.player[1] = self.player2
-                self.clickable_objects = copy.copy(tmp_clickable)
-                print("gegenAI")
-                break
-            
+        while self.mode_select:
+            self.input()       
             self.render()
             self.wait()
-        self.running = True
+        self.clickable_objects = copy.copy(tmp_clickable)
 
         """
         game loop

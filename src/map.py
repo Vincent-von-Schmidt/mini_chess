@@ -51,6 +51,12 @@ class Tile:
 
         self.inital_surface: pygame.surface.Surface = self.surface.copy()
 
+        self.highlight_surface: pygame.surface.Surface = self.surface.copy()
+        tmp = pygame.surface.Surface((const.TILE_SIZE, const.TILE_SIZE))
+        tmp.fill((200, 10, 10))
+        tmp.set_alpha(100)
+        self.highlight_surface.blit(tmp, (0,0))
+
     def set_surface(self, surface: pygame.surface.Surface) -> None:
         """
         update the internal surface
@@ -68,6 +74,18 @@ class Tile:
         return the initial surface without any outside changes
         """
         return self.inital_surface.copy()
+
+    def get_highlight_surface(self) -> pygame.surface.Surface:
+        """
+        return the highlight surface
+        """
+        return self.highlight_surface.copy()
+
+    def update_highlight(self, highlight) -> None:
+        if highlight:
+            self.set_surface(self.get_highlight_surface())
+        else:
+            self.set_surface(self.get_initial_surface())
 
     def is_hover(self) -> bool:
         """
@@ -159,6 +177,7 @@ class Map:
                     source = tile.surface,
                     dest = destination
                 )
+                tile.update_highlight(False)
 
                 widths.append( tile.surface.get_width() )
 

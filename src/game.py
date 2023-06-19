@@ -146,6 +146,11 @@ class Game:
                             print("got tile")
                             self.highlighted_figure = tile.get_figure()
                             self.highlighted_figure.set_highlight( True )
+                            #highlight attacked tiles
+                            for turn in self.turns:
+                                if turn[0] == tile.get_id():
+                                    self.map.construct_matrix[turn[1]//const.RATIO[1]][turn[1]%const.RATIO[0]].update_highlight(True)
+                            self.map.render()
                             break
 
             for object in self.clickable_objects:

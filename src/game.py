@@ -84,7 +84,8 @@ class Game:
                     self.running: bool = False
 
                 case pygame.MOUSEBUTTONUP:
-                    if event.button == 1: # left click
+                    if self.running == False: pass
+                    elif event.button == 1: # left click
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
                         
@@ -101,9 +102,10 @@ class Game:
                                 
                                 # if figure on tile, kill it
                                 if tile.get_figure() != None:
-                                    tile.set_figure( None )
                                     figure = tile.get_figure()
+                                    self.clickable_objects.remove(figure)
                                     del figure
+                                    tile.set_figure( None )
 
                                 # move figure
                                 self.highlighted_figure.set_tile( tile )
@@ -214,6 +216,7 @@ class Game:
         game loop
         """
 
+        self.running = False
         tmp_clickable = copy.copy(self.clickable_objects)
         self.clickable_objects = []
         self.clickable_objects.append(clickable.Button(
@@ -245,6 +248,7 @@ class Game:
             
             self.render()
             self.wait()
+        self.running = True
 
         while self.running:
 

@@ -1,5 +1,6 @@
 import pygame
 import copy
+import time
 
 import map
 import clickable
@@ -24,6 +25,7 @@ class Game:
 
         # stops game loop if necesary
         self.running: bool = True
+        self.mode_select: bool = True
 
         # init map
         self.map: map.Map = map.Map()
@@ -34,7 +36,7 @@ class Game:
         self.clickable_objects.append( clickable.Button(
             text = "resign",
             position = (0, const.BOARD_RESOLUTION[1]),
-            on_click = lambda: print("clicked"),
+            on_click = self.button_resign,
         ))
 
         # init figures
@@ -67,6 +69,22 @@ class Game:
 
         self.last_turn: tuple[int, int] | None = None
 
+        self.end: str = ''
+    
+    def button_resign(self):
+        self.running = False
+        self.end = self.position.player[self.position.player.index(self.position.cur)-1].color + " wins"
+
+    def button_pvp(self):
+        self.mode_select = False
+        print("gegenSpieler")
+
+    def button_pve(self):
+        self.player2 = input_handler.AI(const.BLACK)
+        self.position.player[1] = self.player2
+        self.mode_select = False
+        print("gegenAI")
+
     def input(self) -> None:
         """
         key input + reaction
@@ -81,15 +99,13 @@ class Game:
             match event.type:
 
                 case pygame.QUIT:
-                    if self.running == False: 
-                        pygame.font.quit()
-                        pygame.quit()
-                        exit()
+                    pygame.font.quit()
+                    pygame.quit()
+                    exit()
 
-                    else: self.running: bool = False
 
                 case pygame.MOUSEBUTTONUP:
-                    if self.running == False: pass
+                    if self.mode_select: pass
                     elif event.button == 1: # left click
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
@@ -116,13 +132,14 @@ class Game:
                                 self.highlighted_figure.set_tile( tile )
                                 print("moved")
 
+                                # save turn for evalution
+                                self.last_turn = turn
+                                print(f"{self.last_turn = }")
+
                             # remove highlight from figure
                             self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
-                            # save turn for evalution
-                            self.last_turn = turn
-                            print(f"{self.last_turn = }")
                             break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
@@ -144,19 +161,28 @@ class Game:
         game logic
         """
 
-        if self.last_turn in self.turns:
-            if type(self.position.cur) == input_handler.Player: self.position.cur.handle_input(self.position, self.last_turn)
-            else: self.position.cur.play_best_turn(self.position)
-            self.last_turn = []
+        if type(self.position.cur) == input_handler.Player: 
+            if self.last_turn != None:
+                self.position.cur.handle_input(self.position, self.last_turn)
+                self.last_turn = None
+                self.turns = self.position.get_possible_turns()
+                print(self.position.field)
+        else:
+            self.position.cur.play_best_turn(self.position)
+            time.sleep(0.1)   #ist das troll?
             self.turns = self.position.get_possible_turns()
             print(self.position.field)
-        if self.position.check_end():
+
+        if self.position.check_end():   #wenn der jetzige Spieler verloren hat, hat der vorherige gewonnen
             self.running = False
+            self.end = self.position.player[self.position.player.index(self.position.cur)-1].color + " wins"
             print(self.position.field)
-            print(self.position.player[self.position.player.index(self.position.cur)-1].color, "wins")
-        if len(self.turns) == 0 and self.position.turn != 0 and self.running:
+            print(self.end)
+
+        if len(self.turns) == 0 and self.running:    #wenn keine Züge mehr möglich sind, ist ein Unentschieden
             self.running = False
-            print("Remis")
+            self.end = "Remis"
+            print(self.end)
 
 
     def render(self) -> None:
@@ -217,47 +243,46 @@ class Game:
         self.clock.tick(self.maxfps)
 
     def run(self) -> None:
-        """
-        game loop
-        """
 
-        self.running = False
-        tmp_clickable = copy.copy(self.clickable_objects)
+        """
+        mode select
+        """
+        tmp_clickable = copy.copy(self.clickable_objects)   #die Objecte des Spielfeldes werden temporär gesichert
         self.clickable_objects = []
         self.clickable_objects.append(clickable.Button(
             text = "PvP",
             position = (0, 140),
-            on_click = clickable.button_push,
+            on_click = self.button_pvp,
         ))
         self.clickable_objects.append(clickable.Button(
             text = "PvE",
             position = (0, 140*2),
-            on_click = clickable.button_push,
+            on_click = self.button_pve,
         ))
-        while True:
-            # events: list = pygame.event.get()
-            # for event in events:
-            #     self.clickable_objects[0].update(event)
-            #     self.clickable_objects[1].update(event)
-            self.input()
-            if self.clickable_objects[0].get_function_return():
-                self.clickable_objects = copy.copy(tmp_clickable)
-                print("gegenSpieler")
-                break
-            if self.clickable_objects[1].get_function_return():
-                self.player2 = input_handler.AI(const.BLACK)
-                self.position.player[1] = self.player2
-                self.clickable_objects = copy.copy(tmp_clickable)
-                print("gegenAI")
-                break
-            
+        while self.mode_select:
+            self.input()       
             self.render()
             self.wait()
-        self.running = True
+        self.clickable_objects = copy.copy(tmp_clickable)
 
+        """
+        game loop
+        """
         while self.running:
 
             self.input()
             self.update()
+            self.render()
+            self.wait()
+        
+        """
+        end screen
+        """
+        self.clickable_objects.append(clickable.Button(   #ein button als Anzeige des Ergebnis
+            text = self.end,
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = lambda: print("game has ended"),
+        ))
+        while not '<Event(256-Quit {})>' in [str(x) for x in pygame.event.get()]:   #wartet auf des Quit event und zeigt den Endscreen
             self.render()
             self.wait()

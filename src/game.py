@@ -147,10 +147,10 @@ class Game:
                             self.highlighted_figure = tile.get_figure()
                             self.highlighted_figure.set_highlight( True )
                             #highlight attacked tiles
-                            for turn in self.turns:
-                                if turn[0] == tile.get_id():
-                                    self.map.construct_matrix[turn[1]//const.RATIO[1]][turn[1]%const.RATIO[0]].update_highlight(True)
-                            self.map.render()
+                            # for turn in self.turns:
+                            #     if turn[0] == tile.get_id():
+                            #         self.map.construct_matrix[turn[1]//const.RATIO[1]][turn[1]%const.RATIO[0]].update_highlight(True)
+                            # self.map.render()
                             break
 
             for object in self.clickable_objects:
@@ -174,6 +174,14 @@ class Game:
                 print(self.position.field)
         else:
             self.position.cur.play_best_turn(self.position)
+            start = self.map.construct_matrix[self.position.history[-1][0]//const.RATIO[1]][self.position.history[-1][0]%const.RATIO[0]]
+            goal = self.map.construct_matrix[self.position.history[-1][1]//const.RATIO[1]][self.position.history[-1][1]%const.RATIO[0]]
+            if goal.get_figure() != None:
+                figure = goal.get_figure()
+                self.clickable_objects.remove(figure)
+                del figure
+                goal.set_figure( None )
+            start.get_figure().set_tile( goal )
             time.sleep(0.1)   #ist das troll?
             self.turns = self.position.get_possible_turns()
             print(self.position.field)

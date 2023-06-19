@@ -16,6 +16,7 @@ ATTACK = 'attack'
 MOVE = 'move'
 EMPTY: int = 0
 PAWN: int = 1
+KNIGHT: int = 2
 
 # bitte noch kommentieren (also vielleicht ... oder lieber nicht um VIncent leiden zu sehen)
 PAWN_MOV = []
@@ -35,5 +36,16 @@ for y in range(MATRIX_RAT):
             PAWN_ATK.append(1)
         else:
             PAWN_ATK.append(0)
-# print(PAWN_ATK)
+
+
+KNIGHT_MOV = []
+KNIGHT_ATK = []
+for y in range(MATRIX_RAT):
+    for x in range(MATRIX_RAT):
+        if (abs(y-MATRIX_POS) == 2 and abs(x-MATRIX_POS) == 1) or (abs(y-MATRIX_POS) == 1 and abs(x-MATRIX_POS) == 2):
+            KNIGHT_MOV.append(0)
+            KNIGHT_ATK.append(1)
+        else:
+            KNIGHT_MOV.append(1)
+            KNIGHT_ATK.append(0)
 

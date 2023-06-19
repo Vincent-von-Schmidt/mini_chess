@@ -67,6 +67,8 @@ class Game:
 
         self.last_turn: tuple[int, int] | None = None
 
+        self.end: str = ''
+
     def input(self) -> None:
         """
         key input + reaction
@@ -81,6 +83,7 @@ class Game:
             match event.type:
 
                 case pygame.QUIT:
+                    print(event)
                     if self.running == False: 
                         pygame.font.quit()
                         pygame.quit()
@@ -152,11 +155,13 @@ class Game:
             print(self.position.field)
         if self.position.check_end():   #wenn der jetzige Spieler verloren hat, hat der vorherige gewonnen
             self.running = False
+            self.end = self.position.player[self.position.player.index(self.position.cur)-1].color + " wins"
             print(self.position.field)
-            print(self.position.player[self.position.player.index(self.position.cur)-1].color, "wins")
-        if len(self.turns) == 0 and self.position.turn != 0 and self.running:    #wenn keine Züge mehr möglich sind, ist ein Unentschieden
+            print(self.end)
+        if len(self.turns) == 0 and self.running:    #wenn keine Züge mehr möglich sind, ist ein Unentschieden
             self.running = False
-            print("Remis")
+            self.end = "Remis"
+            print(self.end)
 
 
     def render(self) -> None:
@@ -217,10 +222,10 @@ class Game:
         self.clock.tick(self.maxfps)
 
     def run(self) -> None:
-        """
-        game loop
-        """
 
+        """
+        mode select
+        """
         self.running = False
         tmp_clickable = copy.copy(self.clickable_objects)   #die Objecte des Spielfeldes werden temporär gesichert
         self.clickable_objects = []
@@ -251,9 +256,24 @@ class Game:
             self.wait()
         self.running = True
 
+        """
+        game loop
+        """
         while self.running:
 
             self.input()
             self.update()
+            self.render()
+            self.wait()
+        
+        """
+        end screen
+        """
+        self.clickable_objects.append(clickable.Button(   #ein button als Anzeige des Ergebnis
+            text = self.end,
+            position = (0, const.BOARD_RESOLUTION[1]),
+            on_click = lambda: print("game has ended"),
+        ))
+        while not '<Event(256-Quit {})>' in [str(x) for x in pygame.event.get()]:   #wartet auf des Quit event und zeigt den Endscreen
             self.render()
             self.wait()

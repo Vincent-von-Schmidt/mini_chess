@@ -171,7 +171,6 @@ class Figure( Clickable_object ):
         set highlight and rerenders the surface to add visible yellow circle around figure
         """
         self.highlight = switch
-        print(1)
         self.render()
 
     def render(self) -> None:

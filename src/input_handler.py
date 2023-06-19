@@ -40,13 +40,7 @@ class AI(Input_Handler):
         self.position = position
         self.last_turn: list[int] = [0, 0]
 
-        self.root = Node(
-            turn = [0, 0],
-            rating = 0,
-            alpha = -999,
-            beta = 999,
-            pointer = []
-        )
+        self.root: Node | None = None
 
         # self.build_tree( self.position )
 
@@ -55,76 +49,117 @@ class AI(Input_Handler):
     
     def play_best_turn(self, position):
 
-        children: list[Node] = self.root.pointer
+        # get child with max rating
+        child_max: tuple[Node | None, int] = (None, 0)
+        for child in self.root.pointer:
+            if child.rating > child_max[1]: child_max = (child, child.rating)
 
-        for child in children:
-            if child.rating == max( [child.rating for child in children] ):
-                self.root = child
-                position.set_turn( child.turn[0], child.turn[1] )
-                break
-
+        self.root = child_max[0]
+        position.set_turn( self.root.turn[0], self.root.turn[1] )
 
     def build_tree(self, position):
-        return self.build( self.root, position, 1 )
+        self.root = self.build( 
+            turn = [0, 0],
+            alpha = -999,
+            beta = 999,
+            position = position,
+            min_max_switch = 1
+        )
 
-    def build(self, tree: Node, position, min_max_switch: int):
+    def build(self,
+          turn: list[int],
+          alpha: int,
+          beta: int,
+          position,
+          min_max_switch: int
+    ) -> Node:
         
         turns: list[list[int]] = position.get_possible_turns()
+        alpha = alpha
+        beta = beta
 
-        if turns == []: # draw
+        # last turn
+        if turns == [] or position.check_end():
+            
+            rating: int = 0 # draw
+
+            if position.cur == self: rating = 1 # win
+            else: rating = -1 # lose
+
+            match min_max_switch:
+
+                case 1: # max
+                    if rating > alpha: alpha = rating
+
+                case -1: # min
+                    if rating < beta: beta = rating
+
             return Node(
                 turn = [],
-                rating = 0,
-                alpha = -999,
-                beta = 999,
+                rating = rating,
+                alpha = alpha,
+                beta = beta,
                 pointer = []
             )
 
-        elif position.check_end():
-
-            if position.cur == self: # win
-                return Node(
-                    turn = [],
-                    rating = 1,
-                    alpha = -999,
-                    beta = 999,
-                    pointer = []
-                )
-
-            else: # lose
-                return Node(
-                    turn = [],
-                    rating = -1,
-                    alpha = -999,
-                    beta = 999,
-                    pointer = []
-                )
-
         else:
 
-            for turn in turns:
+            pointer: list[Node] = []
+
+            for turn_neo in turns:
 
                 position_neo = copy.deepcopy( position )
-                position_neo.set_turn( turn[0], turn[1] )
-                
+                position_neo.set_turn( turn_neo[0], turn_neo[1] )
+
                 node: Node = self.build(
-                    tree = Node(
-                        turn = turn,
-                        rating = 0,
-                        alpha = -999,
-                        beta = 999,
-                        pointer = []
-                    ),
+                    turn = turn_neo,
+                    alpha = alpha,
+                    beta = beta,
                     position = position_neo,
                     min_max_switch = -min_max_switch
                 )
 
-                tree.pointer.append( node )
+                alpha = node.alpha
+                beta = node.beta
 
-            # children
-            children: list[Node] = tree.pointer 
+                # does not generate the remaining branches -> cut the rest
+                if alpha >= beta: break
 
-            # negamax of the rating of the children equals the new rating
-            tree.rating = -max( [child.rating for child in children] )
+                pointer.append( node )
 
-            return tree
+            match min_max_switch:
+
+                case 1: # max
+
+                    rating_list: list[int] = []
+
+                    for child in pointer:
+                        rating: int = child.rating
+                        if rating > 0: rating_list.append( rating )
+                    
+                    rating: int = sum( rating_list )
+
+                    if rating > alpha: alpha = rating
+
+                case -1: # min
+
+                    rating_list: list[int] = []
+
+                    for child in pointer:
+                        rating: int = child.rating
+                        if rating < 0: rating_list.append( rating )
+                    
+                    rating: int = sum( rating_list )
+
+                    if rating < beta: beta = rating
+
+                case _:
+                    raise TypeError( "min_max_switch has to be 1 or -1" )
+
+            return Node(
+                turn = turn,
+                rating = rating,
+                alpha = alpha,
+                beta = beta,
+                pointer = pointer
+            )

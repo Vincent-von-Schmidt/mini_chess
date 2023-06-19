@@ -64,7 +64,7 @@ class Game:
             self.ai,
             cur = self.player1
         )
-        self.ai.set_position( self.position )
+        # self.ai.set_position( self.position )
         self.ai.build_tree( self.position )
         self.turns = self.position.get_possible_turns()
 
@@ -111,6 +111,8 @@ class Game:
                                 # move figure
                                 self.highlighted_figure.set_tile( tile )
                                 print("moved")
+
+                                self.ai.play_best_turn( self.position )
 
                             # remove highlight from figure
                             self.highlighted_figure.set_highlight( False )

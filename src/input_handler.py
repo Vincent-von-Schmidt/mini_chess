@@ -4,17 +4,8 @@ from dataclasses import dataclass
 import copy
 
 
-class Input_Handler:
-    def __init__(self) -> None:
-        pass
-    
-    def set_turn(self) -> None:
-        ...
-
-
-class Player(Input_Handler):
+class Player:
     def __init__(self, color) -> None:
-        super().__init__()
         self.color = color
     
     def handle_input(self, position, turn):
@@ -32,9 +23,8 @@ class Node:
     pointer: list
 
 
-class AI(Input_Handler):
+class AI:
     def __init__(self, color, position = None) -> None:
-        super().__init__()
 
         self.color = color
         self.position = position
@@ -57,6 +47,7 @@ class AI(Input_Handler):
         self.root = child_max[0]
         position.set_turn( self.root.turn[0], self.root.turn[1] )
 
+
     def build_tree(self, position):
         self.root = self.build( 
             turn = [0, 0],
@@ -65,6 +56,7 @@ class AI(Input_Handler):
             position = position,
             min_max_switch = 1
         )
+        print(f"{self.root = }")
 
     def build(self,
           turn: list[int],
@@ -83,8 +75,8 @@ class AI(Input_Handler):
             
             rating: int = 0 # draw
 
-            if position.cur == self: rating = 1 # win
-            else: rating = -1 # lose
+            if position.cur == self: rating = -1 # win
+            else: rating = 1 # lose
 
             match min_max_switch:
 
@@ -123,9 +115,10 @@ class AI(Input_Handler):
                 beta = node.beta
 
                 # does not generate the remaining branches -> cut the rest
-                if alpha >= beta: break
+                # if alpha >= beta: break
 
                 pointer.append( node )
+                print(f"{node = }")
 
             match min_max_switch:
 

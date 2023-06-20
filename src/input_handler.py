@@ -4,17 +4,8 @@ from dataclasses import dataclass
 import copy
 
 
-class Input_Handler:
-    def __init__(self) -> None:
-        pass
-    
-    def set_turn(self) -> None:
-        ...
-
-
-class Player(Input_Handler):
+class Player:
     def __init__(self, color) -> None:
-        super().__init__()
         self.color = color
     
     def handle_input(self, position, turn):
@@ -32,9 +23,8 @@ class Node:
     pointer: list
 
 
-class AI(Input_Handler):
+class AI:
     def __init__(self, color, position = None) -> None:
-        super().__init__()
 
         self.color = color
         self.position = position
@@ -136,11 +126,7 @@ class AI(Input_Handler):
                     min_max_switch = -min_max_switch
                 )
 
-                
-
                 pointer.append( node )
-
-                
 
                 match min_max_switch:
 

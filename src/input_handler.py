@@ -60,6 +60,20 @@ class AI(Input_Handler):
         print("Root: ", self.root)
         position.set_turn( self.root.turn[0], self.root.turn[1] )
 
+    def rate_turn(self, position) -> int:
+        rate = 0
+        turns = position.get_possible_turns()
+        print(position.cur, self)
+        if position.check_end() and type(position.cur) == type(self): 
+            rate = -1*(10-position.turn) # lose
+        elif position.check_end() and type(position.cur) != type(self): 
+            rate = 1*(5-position.turn) # win
+        elif len(turns) == 0: 
+            rate = 0 # draw
+        for i in position.field:
+            pass
+        return rate
+
     def build_tree(self, position):
         self.root = self.build( 
             turn = [0, 0],
@@ -84,13 +98,7 @@ class AI(Input_Handler):
         # last turn
         if turns == [] or position.check_end():
             
-            print(position.cur, self)
-            if type(position.cur) == type(self): 
-                rating = -1 # win
-            else: 
-                rating = 1 # lose
-            if len(turns) == 0: 
-                rating = 0 # draw
+            rating = self.rate_turn(position)
 
             match min_max_switch:
 

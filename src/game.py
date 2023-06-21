@@ -145,6 +145,7 @@ class Game:
                                 highlight_tile: map.Tile = self.map.get_tile_by_id( highlight_tile_id )
                                 highlight_tile.set_highlight( False )
 
+                            # redraw the map surface, to make the highlights visible
                             self.map.render()
 
                             break # otherwise highlighted_figure will be set in next loop entry
@@ -164,6 +165,7 @@ class Game:
                                     highlight_tile: map.Tile = self.map.get_tile_by_id( turn[1] )
                                     highlight_tile.set_highlight( True )
                             
+                            # redraw the map surface, to make the highlights visible
                             self.map.render()
 
                             break

@@ -157,8 +157,9 @@ class Game:
 
                             # highlight the possible turns
                             for turn in self.position.get_possible_turns():
-                                highlight_tile: map.Tile = self.map.get_tile_by_id( turn[1] )
-                                highlight_tile.set_highlight( True )
+                                if self.map.get_tile_by_id( turn[0] ) == self.highlighted_figure.get_tile():
+                                    highlight_tile: map.Tile = self.map.get_tile_by_id( turn[1] )
+                                    highlight_tile.set_highlight( True )
                             
                             self.map.render()
 

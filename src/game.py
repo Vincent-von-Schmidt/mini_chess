@@ -140,7 +140,7 @@ class Game:
                             self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
-                            # map -> deactivate turn highlight
+                            # map -> deactivate turn highlight for entire map
                             for highlight_tile_id in range( const.RATIO[0] * const.RATIO[1] ):
                                 highlight_tile: map.Tile = self.map.get_tile_by_id( highlight_tile_id )
                                 highlight_tile.set_highlight( False )
@@ -149,6 +149,7 @@ class Game:
 
                             break # otherwise highlighted_figure will be set in next loop entry
 
+                        # if clicked on tile with no figure on it
                         if tile != None and tile.get_figure() != None:
                             print("got tile")
                             self.highlighted_figure = tile.get_figure()

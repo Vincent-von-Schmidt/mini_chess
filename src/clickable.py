@@ -183,7 +183,7 @@ class Figure( Clickable_object ):
             position = (self.tile.get_position())
         )
 
-        surface: pygame.surface.Surface = self.tile.get_initial_surface()
+        surface: pygame.surface.Surface = self.tile.get_surface()
 
         center: tuple[int, int] = (const.TILE_SIZE // 2, const.TILE_SIZE // 2)
         radius = const.TILE_SIZE // 2 - 15 # slidly smaller than the self.tile

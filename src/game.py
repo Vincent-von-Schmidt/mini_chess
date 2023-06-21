@@ -229,6 +229,13 @@ class Game:
         # objects_board to draw on screen
 
         objects_board.append(self.map.get_map())
+
+        for i in range(const.RATIO[1]*const.RATIO[0]):
+            tile = self.map.get_tile_by_id(i)
+            figure = tile.get_figure()
+            if figure != None:
+                figure.set_tile(tile)
+
         for object in self.clickable_objects:
 
             if isinstance( object, clickable.Button ):

@@ -140,17 +140,27 @@ class Game:
                             self.highlighted_figure.set_highlight( False )
                             self.highlighted_figure = None
 
+                            # map -> deactivate turn highlight
+                            for highlight_tile_id in range( const.RATIO[0] * const.RATIO[1] ):
+                                highlight_tile: map.Tile = self.map.get_tile_by_id( highlight_tile_id )
+                                highlight_tile.set_highlight( False )
+
+                            self.map.render()
+
                             break # otherwise highlighted_figure will be set in next loop entry
 
                         if tile != None and tile.get_figure() != None:
                             print("got tile")
                             self.highlighted_figure = tile.get_figure()
                             self.highlighted_figure.set_highlight( True )
-                            #highlight attacked tiles
-                            # for turn in self.turns:
-                            #     if turn[0] == tile.get_id():
-                            #         self.map.construct_matrix[turn[1]//const.RATIO[1]][turn[1]%const.RATIO[0]].update_highlight(True)
-                            # self.map.render()
+
+                            # highlight the possible turns
+                            for turn in self.position.get_possible_turns():
+                                highlight_tile: map.Tile = self.map.get_tile_by_id( turn[1] )
+                                highlight_tile.set_highlight( True )
+                            
+                            self.map.render()
+
                             break
 
             for object in self.clickable_objects:

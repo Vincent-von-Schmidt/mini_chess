@@ -1,7 +1,6 @@
 import pygame
 
 import const
-# from clickable import Figure
 
 
 class Tile:
@@ -81,8 +80,9 @@ class Tile:
         """
         return self.highlight_surface.copy()
 
-    def update_highlight(self, highlight) -> None:
-        if highlight:
+    def set_highlight(self, switch: bool) -> None:
+
+        if switch:
             self.set_surface(self.get_highlight_surface())
         else:
             self.set_surface(self.get_initial_surface())
@@ -177,7 +177,6 @@ class Map:
                     source = tile.surface,
                     dest = destination
                 )
-                tile.update_highlight(False)
 
                 widths.append( tile.surface.get_width() )
 

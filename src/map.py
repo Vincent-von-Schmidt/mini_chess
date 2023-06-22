@@ -10,6 +10,11 @@ class Tile:
     def __new__(cls, *args, **kwargs):
         """
         counts the created objects to use as id
+
+        :param *args: *args passed to constructor
+        :param *kwargs: *kwargs passed to constructor
+
+        :return Tile object: the created object
         """
 
         cls.__number_instances += 1
@@ -17,11 +22,10 @@ class Tile:
 
     def __init__(self, texture: tuple[int, ...] | str) -> None:
         """
-        texture: tuple[int, ...] -> RBGA color code
+        field on map
 
-        OR
-
-        texture: str -> path to image file
+        :param tuple[int, ...] texture: RGB colorcode - color of surface
+        :param str texture: path to texture image - texture of surface
         """
 
         self.position: tuple[int, int] | None = None
@@ -40,7 +44,7 @@ class Tile:
         # path given -> draw image on tile
         if texture_type == str:
             self.surface.blit(
-                pygame.image.load( texture ), # load texture image
+                pygame.image.build( texture ), # build texture image
                 (0, 0) # default position to draw
             )
 
@@ -59,28 +63,46 @@ class Tile:
     def set_surface(self, surface: pygame.surface.Surface) -> None:
         """
         update the internal surface
+
+        :param pygame.surface.Surface surface: new surface
         """
+
         self.surface = surface
 
     def get_surface(self) -> pygame.surface.Surface:
         """
         return the drawn image
+
+        :return pygame.surface.Surface: internal surface
         """
+
         return self.surface
 
     def get_initial_surface(self) -> pygame.surface.Surface:
         """
         return the initial surface without any outside changes
+
+        :return pygame.surface.Surface: surface with no changes made
         """
+
         return self.inital_surface.copy()
 
     def get_highlight_surface(self) -> pygame.surface.Surface:
         """
         return the highlight surface
+
+        :return pygame.surface.Surface: modified surface with highlight layer
         """
+
         return self.highlight_surface.copy()
 
     def set_highlight(self, switch: bool) -> None:
+        """
+        replaces the surface with the modified highlight surface or reset
+        the surface to the unmodified surface
+
+        :param bool switch: decide if tile should be highlighted or not
+        """
 
         if switch:
             self.set_surface(self.get_highlight_surface())
@@ -89,7 +111,9 @@ class Tile:
 
     def is_hover(self) -> bool:
         """
-        returns true if tile is hoverd
+        check if mouse if hovering over tile
+
+        :return bool: returns True if mouse is hovering
         """
 
         mouse_position: tuple[int, int] = pygame.mouse.get_pos()
@@ -102,23 +126,50 @@ class Tile:
         return False
 
     def set_position(self, coordinates: tuple[int, int]) -> None:
+        """
+        updates the coordinates of the tile
+
+        :param tuple[int, int] coordinates: coordinates of the top left corner of the tile
+        """
+
         self.position = coordinates
 
     def set_figure(self, figure) -> None:
+        """
+        saves the figure wich is currently drawn on surface
+
+        :param clickable.Figure figure: game figure
+        """
+
         self.figure = figure
 
     def get_figure(self):
+        """
+        :return clickable.Figure: game figure
+        """
+
         return self.figure
 
     def get_position(self) -> tuple[int, int] | None:
+        """
+        :return tuple[int, int]: coordinates of the top left corner of the tile
+        """
+
         return self.position
 
     def get_id(self) -> int:
+        """
+        :return int: tile id
+        """
+
         return self.id
 
 
 class Map:
     def __init__(self) -> None:
+        """
+        chess board
+        """
 
         width: int = const.RATIO[0] * const.TILE_SIZE
         height: int = const.RATIO[1] * const.TILE_SIZE
@@ -128,14 +179,13 @@ class Map:
         # tiles will be loaded in this list
         self.construct_matrix: list = []
 
-        self.load()
+        self.build()
         self.render()
 
-    def load(self) -> None:
+    def build(self) -> None:
         """
         build the construct_matrix
         """
-
 
         for y in range( const.RATIO[0] ): # row
             
@@ -185,14 +235,33 @@ class Map:
             heights.append( tmp_tile.surface.get_height() )
 
     def get_map(self) -> list:
+        """
+        returns the surface and coordinates in the format used by the pygame 
+        builtin blits function
+
+        :return list: surface + coordinates
+        """
+
         return [(self.surface), (0, 0)]
 
     def get_construct_matrix(self) -> list[list[Tile]]:
+        """
+        construct_matrix built by build function
+
+        :return list[list[Tile]]: tile matrix
+        """
+
         return self.construct_matrix
 
     def get_tile_by_id(self, id: int) -> Tile:
         """
-        returns the tile with the given id
+        goes through the tiles used in map and returns the Tile with the given id
+
+        :param int id: id of tile
+
+        :return Tile: map field
+
+        :raises NotImplementedError: if tile with given id was not found
         """
 
         for row in self.construct_matrix:
@@ -205,7 +274,10 @@ class Map:
 
     def get_tile_by_hover( self ) -> Tile | None:
         """
-        return hoverd tile
+        check wich tile is hoverd by the mouse and returns it
+
+        :return Tile: map field
+        :return None: if no tile is hoverd
         """
 
         for row in self.construct_matrix:

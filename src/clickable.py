@@ -1,9 +1,7 @@
 import pygame
 from typing import Callable, Any
 
-import main
 import const
-# from map import Tile
 
 
 class Clickable_object:
@@ -14,6 +12,10 @@ class Clickable_object:
     ) -> None:
         """
         parent class to create button objects
+
+        :param tuple[int, int] position: coordinates of top left corner
+        :param Callable on_click: function that will execute if object has been clicked
+        :param None on_click: no function will be executed if object has been clicked
         """
 
         self.position: tuple[int, int] = position
@@ -24,27 +26,43 @@ class Clickable_object:
     def set_clicked(self, on_click: Callable) -> None:
         """
         set function to execute on click
+
+        :param Callable on_click: function that will execute if object has been clicked
         """
+
         self.on_click = on_click
 
     def get_function_return(self) -> Any:
+        """
+        :return: the return of the on_click function
+        """
+
         return self.on_click_return
 
     def set_geometry(self, surface: pygame.surface.Surface) -> None:
         """
         updates the surface to draw on screen
+
+        :param pygame.surface.Surface surface: visible surface of the object
         """
+
         self.surface = surface
 
     def get_map(self) -> list:
         """
-        returns the surface and the coordinates to draw it on the screen
+        returns the surface and coordinates in the format used by the pygame 
+        builtin blits function
+
+        :return list: surface + coordinates
         """
+
         return [self.surface, self.position]
 
     def is_hover(self) -> bool:
         """
-        if mouse is hovering over object, return true
+        check if mouse if hovering over tile
+
+        :return bool: returns True if mouse is hovering
         """
 
         mouse_position: tuple[int, int] = pygame.mouse.get_pos()
@@ -59,6 +77,8 @@ class Clickable_object:
     def update(self, event) -> None:
         """
         processe the user inputs
+
+        :param event: pygame event
         """
 
         if self.is_hover():
@@ -84,6 +104,11 @@ class Button( Clickable_object ):
     ) -> None:
         """
         button with clickable area
+
+        :param str text: text on the button
+        :param tuple[int, int] position: coordinates of the top left corner of the object
+        :param Callable on_click: function that will execute if object has been clicked
+        :param None on_click: no function will be executed if object has been clicked
         """
 
         super().__init__(position, on_click)
@@ -119,7 +144,10 @@ class Button( Clickable_object ):
     def set_text(self, text: str) -> None:
         """
         set and render text on button
+
+        :param str text: text on the button
         """
+
         self.text = self.font.render(
             text, False, (0, 0, 0)
         )
@@ -134,6 +162,9 @@ class Figure( Clickable_object ):
     ) -> None:
         """
         playable character
+
+        :param tuple[int, int, int] color: RGB colorcode if the visible circle
+        :param map.Tile tile: map field where the figure should be placed
         """
 
         self.color: tuple[int, int, int] = color
@@ -148,13 +179,18 @@ class Figure( Clickable_object ):
     def __del__(self) -> None:
         """
         destructor
+        reset of the tile's surface
         """
+
         self.tile.set_surface( self.tile.get_initial_surface() )
 
     def set_tile(self, tile) -> None:
         """
         updates tile to draw on -> moves the figure to another tile
+
+        :param map.Tile tile: map field where the figure should be placed
         """
+
         self.pre_tile = self.tile
         self.tile = tile
         self.pre_tile.set_figure( None )
@@ -164,13 +200,19 @@ class Figure( Clickable_object ):
     def get_tile(self):
         """
         return tile, where the figure is drawn on
+
+        :return map.Tile: map field where the figure is placed
         """
+
         return self.tile
 
     def set_highlight(self, switch: bool) -> None:
         """
         set highlight and rerenders the surface to add visible yellow circle around figure
+
+        :param bool switch: decide if tile should be highlighted or not
         """
+
         self.highlight = switch
         self.render()
 
@@ -208,6 +250,3 @@ class Figure( Clickable_object ):
         # updates the surface to draw on map
         self.tile.set_surface( surface )
         self.set_geometry( surface )
-
-def button_push():
-    return True

@@ -109,9 +109,13 @@ class Game:
                     elif event.button == 1: # left click
 
                         tile: map.Tile | None = self.map.get_tile_by_hover()
-                        
+
                         # if highlighted
                         if self.highlighted_figure != None:
+
+                            # if tile equals None, no tile has been hovered
+                            # it can be anythink else including the buttons
+                            if tile == None: break
 
                             print(f"{self.turns = }")
 
@@ -176,7 +180,6 @@ class Game:
         # close window on key e -> faster keyboard control
         if keys[pygame.K_e]:
             self.running: bool = False
-
 
     def update(self) -> None:
         """

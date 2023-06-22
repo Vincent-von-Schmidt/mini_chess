@@ -191,14 +191,18 @@ class Game:
                 print(self.position.field)
         else:
             self.position.cur.play_best_turn(self.position)
-            start = self.map.construct_matrix[self.position.history[-1][0]//const.RATIO[1]][self.position.history[-1][0]%const.RATIO[0]]
-            goal = self.map.construct_matrix[self.position.history[-1][1]//const.RATIO[1]][self.position.history[-1][1]%const.RATIO[0]]
+            start = self.map.get_tile_by_id(self.position.history[-1][0])
+            goal = self.map.get_tile_by_id(self.position.history[-1][1])
             if goal.get_figure() != None:
                 figure = goal.get_figure()
                 self.clickable_objects.remove(figure)
                 del figure
                 goal.set_figure( None )
+            figure = start.get_figure()
             start.get_figure().set_tile( goal )
+            del figure
+            start.set_surface(start.get_initial_surface())
+            self.map.render()
             time.sleep(0.1)   #ist das troll?
             self.turns = self.position.get_possible_turns()
             print(self.position.field)

@@ -294,14 +294,14 @@ class Game:
         tmp_clickable = copy.copy(self.clickable_objects)   #die Objecte des Spielfeldes werden temporär gesichert
         self.clickable_objects = []
         self.clickable_objects.append(clickable.Button(
-            text = "PvP",
+            text = "Singleplayer",
             position = (0, 140),
-            on_click = self.button_pvp,
+            on_click = self.button_pve,
         ))
         self.clickable_objects.append(clickable.Button(
-            text = "PvE",
+            text = "Multiplayer",
             position = (0, 140*2),
-            on_click = self.button_pve,
+            on_click = self.button_pvp,
         ))
         while self.mode_select:
             self.input()       

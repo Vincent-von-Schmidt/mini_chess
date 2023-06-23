@@ -21,7 +21,7 @@ class Position:
         self.turn += 1
         self.cur = self.player[self.turn%2]
         self.history.append([start, target])
-        # print("Gespielt: ", start, "nach", target)
+        print("Gespielt: ", start, "nach", target)
 
     def get_position(self) -> list:
         """

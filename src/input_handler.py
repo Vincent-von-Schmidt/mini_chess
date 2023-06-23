@@ -45,6 +45,7 @@ class AI:
         child_max: tuple[Node | None, int] = (None, -999)
         for child in self.root.pointer:
             if child.rating > child_max[1]: child_max = (child, child.rating)
+            else: del child
 
         self.root = child_max[0]
         print("Root: ", self.root)

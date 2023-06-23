@@ -21,7 +21,7 @@ class Position:
         self.turn += 1
         self.cur = self.player[self.turn%2]
         self.history.append([start, target])
-        print("Gespielt: ", start, "nach", target)
+        # print("Gespielt: ", start, "nach", target)
 
     def get_position(self) -> list:
         """
@@ -84,7 +84,7 @@ class Position:
             if (self.field[i]//abs(self.field[i])) == pl:    #wenn die Figur dem Gegner gehört und auf der eigenen Linie ist, hat der Spieler verloren
                 if pl == 1 and i//const.RATIO[0] == 0:
                     return True
-                if pl == -1 and i//const.RATIO[0] == 2:
+                if pl == -1 and i//const.RATIO[0] == const.RATIO[0]-1:
                     return True
             else:
                 n += 1
